@@ -1,6 +1,7 @@
-import { NavLink } from 'react-router-dom'
-import { Home, FileText, Package, Mail, Instagram, Facebook, Linkedin, Youtube, Twitter, MessageCircle, Music } from 'lucide-react'
+import { NavLink, useNavigate } from 'react-router-dom'
+import { Home, FileText, Package, Mail, Instagram, Facebook, Linkedin, Youtube, Twitter, MessageCircle, Music, LogIn, LogOut, User } from 'lucide-react'
 import { useLang } from '../context/LangContext'
+import { useAuth } from '../context/AuthContext'
 import { Logo } from './Logo'
 
 const socialLinks = [
@@ -16,6 +17,8 @@ const socialLinks = [
 
 export function Sidebar() {
     const { lang, setLang, t } = useLang()
+    const { user, logout, loading } = useAuth()
+    const navigate = useNavigate()
 
     const navItems = [
         { to: '/', label: t.home, icon: Home },
@@ -23,6 +26,11 @@ export function Sidebar() {
         { to: '/products-listing', label: t.products, icon: Package },
         { to: '/contact', label: t.contact, icon: Mail },
     ]
+
+    const handleLogout = async () => {
+        await logout()
+        navigate('/')
+    }
 
     return (
         <aside className="sidebar">
@@ -46,19 +54,59 @@ export function Sidebar() {
             </nav>
 
             <div className="sidebar-footer">
+                {/* User Auth Section */}
+                <div className="sidebar-auth">
+                    {loading ? (
+                        <div className="auth-loading">
+                            <span className="loading-spinner-small"></span>
+                        </div>
+                    ) : user ? (
+                        <div className="user-section">
+                            <div className="user-info">
+                                <div className="user-avatar">
+                                    <User size={16} />
+                                </div>
+                                <span className="user-name">
+                                    {user.user_metadata?.full_name || user.email?.split('@')[0]}
+                                </span>
+                            </div>
+                            <button
+                                className="auth-btn logout-btn"
+                                onClick={handleLogout}
+                                title={t.logout}
+                            >
+                                <LogOut size={16} />
+                                <span>{t.logout}</span>
+                            </button>
+                        </div>
+                    ) : (
+                        <NavLink
+                            to="/login"
+                            className={({ isActive }) =>
+                                `auth-btn login-btn ${isActive ? 'active' : ''}`
+                            }
+                        >
+                            <LogIn size={16} />
+                            <span>{t.loginBtn}</span>
+                        </NavLink>
+                    )}
+                </div>
+
                 {/* Language Switcher - Side by side with flags */}
                 <div className="lang-switcher-row">
                     <button
                         className={`lang-btn ${lang === 'tr' ? 'active' : ''}`}
                         onClick={() => setLang('tr')}
+                        title="Türkçe"
                     >
-                        🇹🇷 TR
+                        🇹🇷
                     </button>
                     <button
                         className={`lang-btn ${lang === 'en' ? 'active' : ''}`}
                         onClick={() => setLang('en')}
+                        title="English"
                     >
-                        🇬🇧 EN
+                        🇬🇧
                     </button>
                 </div>
 
@@ -81,4 +129,5 @@ export function Sidebar() {
         </aside>
     )
 }
+
 

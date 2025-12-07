@@ -45,6 +45,24 @@ interface Translations {
     contactSuccess: string
     contactSuccessDesc: string
     contactLocation: string
+
+    // Auth
+    loginTitle: string
+    loginSubtitle: string
+    loginBtn: string
+    registerTitle: string
+    registerSubtitle: string
+    registerBtn: string
+    password: string
+    confirmPassword: string
+    fullNamePlaceholder: string
+    noAccount: string
+    registerLink: string
+    hasAccount: string
+    loginLink: string
+    passwordMismatch: string
+    passwordTooShort: string
+    logout: string
 }
 
 const translations: Record<Lang, Translations> = {
@@ -84,6 +102,24 @@ const translations: Record<Lang, Translations> = {
         contactSuccess: 'Message Sent!',
         contactSuccessDesc: "Thanks for reaching out. I'll get back to you soon.",
         contactLocation: 'Location',
+
+        // Auth
+        loginTitle: 'Welcome Back',
+        loginSubtitle: 'Sign in to your account',
+        loginBtn: 'Sign In',
+        registerTitle: 'Create Account',
+        registerSubtitle: 'Join us today',
+        registerBtn: 'Sign Up',
+        password: 'Password',
+        confirmPassword: 'Confirm Password',
+        fullNamePlaceholder: 'John Doe',
+        noAccount: "Don't have an account?",
+        registerLink: 'Sign up',
+        hasAccount: 'Already have an account?',
+        loginLink: 'Sign in',
+        passwordMismatch: 'Passwords do not match',
+        passwordTooShort: 'Password must be at least 6 characters',
+        logout: 'Logout',
     },
     tr: {
         home: 'Ana Sayfa',
@@ -121,6 +157,24 @@ const translations: Record<Lang, Translations> = {
         contactSuccess: 'Mesaj Gönderildi!',
         contactSuccessDesc: 'İletişime geçtiğiniz için teşekkürler. En kısa sürede döneceğim.',
         contactLocation: 'Konum',
+
+        // Auth
+        loginTitle: 'Tekrar Hoşgeldin',
+        loginSubtitle: 'Hesabına giriş yap',
+        loginBtn: 'Giriş Yap',
+        registerTitle: 'Hesap Oluştur',
+        registerSubtitle: 'Bugün bize katıl',
+        registerBtn: 'Kayıt Ol',
+        password: 'Şifre',
+        confirmPassword: 'Şifreyi Onayla',
+        fullNamePlaceholder: 'Ahmet Yılmaz',
+        noAccount: 'Hesabın yok mu?',
+        registerLink: 'Kayıt ol',
+        hasAccount: 'Zaten hesabın var mı?',
+        loginLink: 'Giriş yap',
+        passwordMismatch: 'Şifreler eşleşmiyor',
+        passwordTooShort: 'Şifre en az 6 karakter olmalı',
+        logout: 'Çıkış Yap',
     },
 }
 
