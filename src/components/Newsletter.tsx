@@ -50,8 +50,8 @@ export function Newsletter() {
         await new Promise(resolve => setTimeout(resolve, 1000))
 
         // Track event
-        if (typeof window !== 'undefined' && (window as any).gtag) {
-            (window as any).gtag('event', 'newsletter_signup', {
+        if (typeof window !== 'undefined' && window.gtag) {
+            window.gtag('event', 'newsletter_signup', {
                 event_category: 'engagement'
             })
         }
