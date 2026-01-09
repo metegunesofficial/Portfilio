@@ -11,8 +11,6 @@ interface Translations {
 
     // Home
     heroTitle: string
-    heroGreeting1: string
-    heroGreeting2: string
     heroBio: string
 
     // Newsletter
@@ -72,13 +70,11 @@ const translations: Record<Lang, Translations> = {
         products: 'Products',
         contact: 'Contact',
 
-        heroTitle: 'Hey, Saumya here',
-        heroGreeting1: "How's your",
-        heroGreeting2: '?',
-        heroBio: "I'm your friendly neighborhood CAD wizard from the mystical land of Haridwar (yep, the place considered as a gateway to lord). With 5+ years of doodling… uh, I mean designing, I turn \"wait, how?\" ideas into \"wow, that's slick!\" reality.",
+        heroTitle: 'Hey, I\'m Mete Güneş',
+        heroBio: "I'm an AI & Automation Specialist with 5+ years of experience transforming complex business challenges into elegant digital solutions. I specialize in AI integration, workflow automation, and full-stack web development. From rapid MVP prototypes to enterprise-scale systems, I help businesses leverage cutting-edge technology to boost efficiency and drive growth.",
 
         newsletterTitle: 'Newsletter',
-        newsletterDesc: "I document my learnings once a month. I would love to share them with you over mail. No bulls**t. No spam. Straight up value.",
+        newsletterDesc: "I share insights on AI, automation, and tech trends monthly. No spam, just actionable value.",
         newsletterPlaceholder: 'your@email.com',
         newsletterBtn: 'Subscribe',
         newsletterSuccess: '🎉 Thanks for subscribing!',
@@ -90,8 +86,8 @@ const translations: Record<Lang, Translations> = {
         blogsTitle: 'Blogs',
         blogsSubtitle: 'Thoughts, stories, and ideas from my journey',
 
-        productsTitle: 'Products',
-        productsSubtitle: 'Digital products and services',
+        productsTitle: 'Portfolio',
+        productsSubtitle: 'Projects and case studies',
 
         contactTitle: 'Contact',
         contactSubtitle: "Let's connect and create something amazing together",
@@ -124,13 +120,11 @@ const translations: Record<Lang, Translations> = {
     tr: {
         home: 'Ana Sayfa',
         blogs: 'Blog',
-        products: 'Ürünler',
+        products: 'Portföy',
         contact: 'İletişim',
 
-        heroTitle: 'Merhaba, ben Saumya',
-        heroGreeting1: 'Nasıl gidiyor',
-        heroGreeting2: '?',
-        heroBio: "Haridwar'ın mistik topraklarından gelen bir CAD sihirbazıyım (evet, tanrılara açılan kapı olarak bilinen yer). 5+ yıllık çizim... yani tasarım deneyimimle, \"nasıl yapılır?\" fikirlerini \"vay, harika!\" gerçekliğe dönüştürüyorum.",
+        heroTitle: 'Merhaba, Ben Mete Güneş',
+        heroBio: "5+ yıllık deneyime sahip bir AI ve Otomasyon Uzmanıyım. Karmaşık iş süreçlerini zarif dijital çözümlere dönüştürüyorum. AI entegrasyonu, iş akışı otomasyonu ve full-stack web geliştirme konularında uzmanım. Hızlı MVP prototiplerinden kurumsal ölçekli sistemlere kadar, işletmelerin son teknolojiyi kullanarak verimliliği artırmasına ve büyümesine yardımcı oluyorum.",
 
         newsletterTitle: 'Bülten',
         newsletterDesc: "Ayda bir öğrendiklerimi belgeliyorum. Bunları sizinle mail ile paylaşmak isterim. Saçmalık yok. Spam yok. Sadece değer.",

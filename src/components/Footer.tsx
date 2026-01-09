@@ -1,16 +1,17 @@
 import { motion } from 'framer-motion'
-import { Instagram, Linkedin, Twitter, Youtube } from 'lucide-react'
+import { Github, Linkedin, Mail, Twitter } from 'lucide-react'
+import { Link } from 'react-router-dom'
 import { useLang } from '../context/LangContext'
 
 const socialLinks = [
-    { icon: Instagram, href: '#', label: 'Instagram' },
-    { icon: Linkedin, href: 'https://www.linkedin.com/in/schats', label: 'LinkedIn' },
-    { icon: Twitter, href: '#', label: 'Twitter' },
-    { icon: Youtube, href: '#', label: 'YouTube' },
+    { icon: Linkedin, href: 'https://linkedin.com/in/metegunes', label: 'LinkedIn' },
+    { icon: Github, href: 'https://github.com/metegunes', label: 'GitHub' },
+    { icon: Twitter, href: 'https://twitter.com/metegunes', label: 'Twitter' },
+    { icon: Mail, href: 'mailto:contact@metegunes.dev', label: 'Email' },
 ]
 
 export function Footer() {
-    const { t } = useLang()
+    const { t, lang } = useLang()
 
     return (
         <footer className="footer-section">
@@ -38,17 +39,17 @@ export function Footer() {
                     ))}
                 </div>
 
-                <motion.a
-                    href="#"
-                    className="btn-outline"
-                    whileHover={{ scale: 1.02 }}
-                >
-                    {t.exploreMore}
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <path d="M7 17L17 7M17 7H7M17 7V17" />
-                    </svg>
-                </motion.a>
+                <div className="footer-links">
+                    <Link to="/privacy-policy" className="footer-legal-link">
+                        {lang === 'tr' ? 'Gizlilik Politikası' : 'Privacy Policy'}
+                    </Link>
+                </div>
+
+                <p className="footer-copyright">
+                    © {new Date().getFullYear()} Mete Güneş. {lang === 'tr' ? 'Tüm hakları saklıdır.' : 'All rights reserved.'}
+                </p>
             </motion.div>
         </footer>
     )
 }
+

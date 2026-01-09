@@ -1,27 +1,26 @@
 import { NavLink, useNavigate } from 'react-router-dom'
-import { Home, FileText, Package, Mail, Instagram, Facebook, Linkedin, Youtube, Twitter, MessageCircle, Music, LogIn, LogOut, User } from 'lucide-react'
+import { Home, FileText, Package, Mail, Linkedin, Twitter, LogIn, LogOut, User, UserCircle, Sun, Moon, Github } from 'lucide-react'
 import { useLang } from '../context/LangContext'
 import { useAuth } from '../context/AuthContext'
+import { useTheme } from '../context/ThemeContext'
 import { Logo } from './Logo'
 
 const socialLinks = [
-    { icon: Instagram, href: 'https://instagram.com/', label: 'Instagram' },
-    { icon: Facebook, href: 'https://facebook.com/', label: 'Facebook' },
-    { icon: MessageCircle, href: 'https://wa.me/', label: 'WhatsApp' },
-    { icon: Linkedin, href: 'https://linkedin.com/', label: 'LinkedIn' },
-    { icon: Youtube, href: 'https://youtube.com/', label: 'YouTube' },
-    { icon: Twitter, href: 'https://twitter.com/', label: 'Twitter' },
-    { icon: Mail, href: 'mailto:your@gmail.com', label: 'Gmail' },
-    { icon: Music, href: 'https://tiktok.com/', label: 'TikTok' },
+    { icon: Linkedin, href: 'https://linkedin.com/in/metegunes', label: 'LinkedIn' },
+    { icon: Github, href: 'https://github.com/metegunes', label: 'GitHub' },
+    { icon: Twitter, href: 'https://twitter.com/metegunes', label: 'Twitter' },
+    { icon: Mail, href: 'mailto:contact@metegunes.dev', label: 'Email' },
 ]
 
 export function Sidebar() {
     const { lang, setLang, t } = useLang()
     const { user, logout, loading } = useAuth()
+    const { resolvedTheme, setTheme } = useTheme()
     const navigate = useNavigate()
 
     const navItems = [
         { to: '/', label: t.home, icon: Home },
+        { to: '/about', label: lang === 'tr' ? 'Hakkımda' : 'About', icon: UserCircle },
         { to: '/blogs', label: t.blogs, icon: FileText },
         { to: '/products-listing', label: t.products, icon: Package },
         { to: '/contact', label: t.contact, icon: Mail },
@@ -92,8 +91,19 @@ export function Sidebar() {
                     )}
                 </div>
 
-                {/* Language Switcher - Side by side with flags */}
+                {/* Theme & Language Row */}
                 <div className="lang-switcher-row">
+                    {/* Theme Toggle */}
+                    <button
+                        className="theme-toggle-btn"
+                        onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
+                        title={resolvedTheme === 'dark' ? 'Light mode' : 'Dark mode'}
+                        aria-label={resolvedTheme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+                    >
+                        {resolvedTheme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+                    </button>
+
+                    {/* Language Switcher */}
                     <button
                         className={`lang-btn ${lang === 'tr' ? 'active' : ''}`}
                         onClick={() => setLang('tr')}

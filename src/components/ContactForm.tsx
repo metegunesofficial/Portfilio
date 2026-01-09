@@ -1,9 +1,11 @@
 import { useState, type FormEvent } from 'react'
 import { Send, CheckCircle, AlertCircle } from 'lucide-react'
+import { Link } from 'react-router-dom'
 import { Button } from './ui/button'
 import { Input } from './ui/input'
 import { Textarea } from './ui/textarea'
 import { Label } from './ui/label'
+import { Checkbox } from './ui/checkbox'
 import { canSubmit, recordSubmission, getRemainingTimeSeconds } from '../lib/rateLimit'
 
 type Lang = 'tr' | 'en'
@@ -26,6 +28,9 @@ const formTexts = {
         nameRequired: 'Ad alanı zorunludur',
         emailInvalid: 'Geçerli bir e-posta adresi giriniz',
         messageRequired: 'Mesaj alanı zorunludur',
+        privacyLabel: 'Kişisel verilerimin işlenmesini kabul ediyorum.',
+        privacyLink: 'Gizlilik Politikası',
+        privacyRequired: 'Devam etmek için onay gereklidir',
     },
     en: {
         name: 'Your name',
@@ -40,6 +45,9 @@ const formTexts = {
         nameRequired: 'Name is required',
         emailInvalid: 'Please enter a valid email address',
         messageRequired: 'Message is required',
+        privacyLabel: 'I agree to the processing of my personal data.',
+        privacyLink: 'Privacy Policy',
+        privacyRequired: 'Consent is required to proceed',
     },
 } as const
 
@@ -47,6 +55,7 @@ interface FormErrors {
     name?: string
     email?: string
     message?: string
+    privacy?: string
 }
 
 export function ContactForm({ lang }: ContactFormProps) {
@@ -55,6 +64,7 @@ export function ContactForm({ lang }: ContactFormProps) {
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
     const [message, setMessage] = useState('')
+    const [privacyAccepted, setPrivacyAccepted] = useState(false)
     const [errors, setErrors] = useState<FormErrors>({})
     const [status, setStatus] = useState<'idle' | 'success' | 'rateLimit'>('idle')
 
@@ -76,6 +86,10 @@ export function ContactForm({ lang }: ContactFormProps) {
 
         if (!message.trim()) {
             newErrors.message = t.messageRequired
+        }
+
+        if (!privacyAccepted) {
+            newErrors.privacy = t.privacyRequired
         }
 
         setErrors(newErrors)
@@ -104,6 +118,7 @@ export function ContactForm({ lang }: ContactFormProps) {
         setName('')
         setEmail('')
         setMessage('')
+        setPrivacyAccepted(false)
         setErrors({})
 
         // Reset success message after 5 seconds
@@ -169,6 +184,26 @@ export function ContactForm({ lang }: ContactFormProps) {
                 />
                 {errors.message && (
                     <p className="text-xs text-red-600 dark:text-red-400">{errors.message}</p>
+                )}
+            </div>
+
+            <div className="space-y-2">
+                <div className="flex items-start gap-2">
+                    <Checkbox
+                        id="privacy"
+                        checked={privacyAccepted}
+                        onCheckedChange={(checked) => setPrivacyAccepted(checked === true)}
+                        aria-invalid={!!errors.privacy}
+                    />
+                    <Label htmlFor="privacy" className="text-sm leading-relaxed cursor-pointer">
+                        {t.privacyLabel}{' '}
+                        <Link to="/privacy-policy" className="text-blue-600 hover:underline dark:text-blue-400">
+                            {t.privacyLink}
+                        </Link>
+                    </Label>
+                </div>
+                {errors.privacy && (
+                    <p className="text-xs text-red-600 dark:text-red-400">{errors.privacy}</p>
                 )}
             </div>
 

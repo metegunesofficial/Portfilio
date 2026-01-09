@@ -1,0 +1,16 @@
+# robots.txt for metegunes.dev
+# AI-friendly portfolio website
+
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://metegunes.dev/sitemap.xml
+
+# Disallow
+Disallow: /api/
+Disallow: /login
+Disallow: /register
+
+# Crawl-delay (optional)
+Crawl-delay: 1
