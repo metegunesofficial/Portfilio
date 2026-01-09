@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, type ReactNode } from 'react'
+import { createContext, useContext, useState, useEffect, type ReactNode } from 'react'
 
 type Lang = 'tr' | 'en'
 
@@ -193,6 +193,11 @@ export function LangProvider({ children }: { children: ReactNode }) {
         localStorage.setItem('lang', newLang)
     }
 
+    // Update document language attribute
+    useEffect(() => {
+        document.documentElement.setAttribute('lang', lang)
+    }, [lang])
+
     return (
         <LangContext.Provider value={{ lang, setLang: handleSetLang, t: translations[lang] }}>
             {children}
@@ -200,6 +205,7 @@ export function LangProvider({ children }: { children: ReactNode }) {
     )
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function useLang() {
     const context = useContext(LangContext)
     if (!context) {
