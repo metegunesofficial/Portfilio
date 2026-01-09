@@ -109,7 +109,7 @@ export function ProjectDetailPage() {
         return (
             <div className="page-wrapper project-not-found">
                 <h1>{lang === 'tr' ? 'Proje Bulunamadı' : 'Project Not Found'}</h1>
-                <Link to="/products-listing" className="btn-primary">
+                <Link to="/projects" className="btn-primary">
                     <ArrowLeft size={18} />
                     {lang === 'tr' ? 'Projelere Dön' : 'Back to Projects'}
                 </Link>
@@ -129,7 +129,7 @@ export function ProjectDetailPage() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
             >
-                <Link to="/products-listing" className="back-link">
+                <Link to="/projects" className="back-link">
                     <ArrowLeft size={18} />
                     {lang === 'tr' ? 'Tüm Projeler' : 'All Projects'}
                 </Link>

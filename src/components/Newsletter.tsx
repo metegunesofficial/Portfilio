@@ -13,24 +13,57 @@ export function Newsletter() {
 
     const errorMessages = {
         required: lang === 'tr' ? 'E-posta adresi gerekli' : 'Email address is required',
-        invalid: lang === 'tr' ? 'Geçerli bir e-posta adresi girin' : 'Please enter a valid email address'
+        invalid: lang === 'tr' ? 'Geçerli bir e-posta adresi girin' : 'Please enter a valid email address',
+        noAt: lang === 'tr' ? 'E-posta adresi @ işareti içermeli' : 'Email must contain @ symbol',
+        noDomain: lang === 'tr' ? 'E-posta adresi bir alan adı içermeli (örn: gmail.com)' : 'Email must contain a domain (e.g., gmail.com)',
+        invalidChars: lang === 'tr' ? 'E-posta adresi geçersiz karakterler içeriyor' : 'Email contains invalid characters',
+        tooShort: lang === 'tr' ? 'E-posta adresi çok kısa' : 'Email address is too short'
     }
 
     const validateEmail = (value: string): string => {
-        if (!value.trim()) return errorMessages.required
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return errorMessages.invalid
-        return ''
-    }
+        const trimmed = value.trim()
 
-    const handleBlur = () => {
-        setTouched(true)
-        setError(validateEmail(email))
+        // Check if empty
+        if (!trimmed) return errorMessages.required
+
+        // Check minimum length
+        if (trimmed.length < 5) return errorMessages.tooShort
+
+        // Check for @ symbol
+        if (!trimmed.includes('@')) return errorMessages.noAt
+
+        // Check for invalid characters (spaces, special chars at wrong places)
+        if (/\s/.test(trimmed)) return errorMessages.invalidChars
+
+        // Split into local and domain parts
+        const parts = trimmed.split('@')
+        if (parts.length !== 2) return errorMessages.invalid
+
+        const [local, domain] = parts
+
+        // Check local part
+        if (!local || local.length === 0) return errorMessages.invalid
+
+        // Check domain part
+        if (!domain || !domain.includes('.')) return errorMessages.noDomain
+
+        // Check domain has valid TLD (at least 2 characters after last dot)
+        const domainParts = domain.split('.')
+        const tld = domainParts[domainParts.length - 1]
+        if (!tld || tld.length < 2) return errorMessages.noDomain
+
+        // Comprehensive regex for final validation
+        const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/
+        if (!emailRegex.test(trimmed)) return errorMessages.invalid
+
+        return ''
     }
 
     const handleChange = (value: string) => {
         setEmail(value)
-        if (touched) {
-            setError(validateEmail(value))
+        // Clear error when user starts typing after a failed submit
+        if (error) {
+            setError('')
         }
     }
 
@@ -82,21 +115,20 @@ export function Newsletter() {
                     </motion.div>
                 ) : (
                     <form onSubmit={handleSubmit} className="newsletter-form" noValidate>
-                        <div className={`newsletter-input-wrapper ${error && touched ? 'has-error' : ''}`}>
+                        <div className={`newsletter-input-wrapper ${error ? 'has-error' : ''}`}>
                             <Mail size={18} className="newsletter-icon" />
                             <input
                                 type="email"
                                 value={email}
                                 onChange={(e) => handleChange(e.target.value)}
-                                onBlur={handleBlur}
                                 placeholder={t.newsletterPlaceholder}
                                 className="newsletter-input"
-                                aria-invalid={error && touched ? 'true' : 'false'}
+                                aria-invalid={error ? 'true' : 'false'}
                                 aria-describedby={error ? 'newsletter-error' : undefined}
                             />
                         </div>
 
-                        {error && touched && (
+                        {error && (
                             <motion.span
                                 className="newsletter-error"
                                 id="newsletter-error"

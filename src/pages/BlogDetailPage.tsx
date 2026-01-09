@@ -35,7 +35,7 @@ Artificial Intelligence is transforming how businesses operate. In this comprehe
 
 ## Why AI Automation?
 
-Over the past 5 years, I've helped 50+ businesses integrate AI into their workflows. The results speak for themselves:
+Over the past 2 years, I've helped many businesses integrate AI into their workflows. The results speak for themselves:
 
 - **40% reduction** in response times
 - **60% decrease** in manual tasks
@@ -70,7 +70,7 @@ Yapay Zeka, işletmelerin çalışma şeklini dönüştürüyor. Bu kapsamlı re
 
 ## Neden AI Otomasyonu?
 
-Son 5 yılda, 50'den fazla işletmenin iş akışlarına AI entegre etmelerine yardımcı oldum. Sonuçlar kendini gösteriyor:
+Son 2 yılda, birçok işletmenin iş akışlarına AI entegre etmelerine yardımcı oldum. Sonuçlar kendini gösteriyor:
 
 - Yanıt sürelerinde **%40 azalma**
 - Manuel görevlerde **%60 düşüş**
