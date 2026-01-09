@@ -12,8 +12,8 @@ export function CVDownload({ cvUrl = '/cv/mete-gunes-cv.pdf', className = '' }: 
 
     const handleDownload = () => {
         // Track download event (for analytics)
-        if (typeof window !== 'undefined' && (window as any).gtag) {
-            (window as any).gtag('event', 'cv_download', {
+        if (typeof window !== 'undefined' && window.gtag) {
+            window.gtag('event', 'cv_download', {
                 event_category: 'engagement',
                 event_label: 'CV Download',
             })
