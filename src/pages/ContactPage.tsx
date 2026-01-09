@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Send, AlertCircle, CheckCircle } from 'lucide-react'
+import { Send, AlertCircle, CheckCircle, Loader2 } from 'lucide-react'
 import { useLang } from '../context/LangContext'
 
 interface FormErrors {
@@ -140,6 +140,8 @@ export function ContactPage() {
                             <input
                                 type="text"
                                 id="name"
+                                name="name"
+                                autoComplete="name"
                                 placeholder={t.contactName}
                                 value={formData.name}
                                 onChange={(e) => handleChange('name', e.target.value)}
@@ -160,6 +162,8 @@ export function ContactPage() {
                             <input
                                 type="email"
                                 id="email"
+                                name="email"
+                                autoComplete="email"
                                 placeholder="your@email.com"
                                 value={formData.email}
                                 onChange={(e) => handleChange('email', e.target.value)}
@@ -197,11 +201,12 @@ export function ContactPage() {
 
                         <button
                             type="submit"
-                            className="submit-btn"
+                            className="submit-btn flex items-center justify-center gap-2"
                             disabled={isSubmitting}
                         >
                             {isSubmitting ? (
-                                <span className="btn-loading">
+                                <span className="btn-loading flex items-center gap-2">
+                                    <Loader2 size={16} className="animate-spin" />
                                     {lang === 'tr' ? 'Gönderiliyor...' : 'Sending...'}
                                 </span>
                             ) : (
