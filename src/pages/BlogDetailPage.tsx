@@ -341,13 +341,26 @@ export function BlogDetailPage() {
 }
 
 // Simple markdown to HTML converter
-function formatMarkdown(text: string): string {
-    return text
+export function formatMarkdown(text: string): string {
+    // Escape HTML special characters to prevent XSS
+    const escapeHtml = (unsafe: string) => {
+        return unsafe
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
+
+    // First escape the input to make it safe
+    const safeText = escapeHtml(text);
+
+    return safeText
         .replace(/^## (.+)$/gm, '<h2>$1</h2>')
         .replace(/^### (.+)$/gm, '<h3>$1</h3>')
         .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
         .replace(/\*(.+?)\*/g, '<em>$1</em>')
-        .replace(/`{3}(\w+)?\n([\s\S]*?)`{3}/g, '<pre><code>$2</code></pre>')
+        .replace(/`{3}(\w+)?\n([\s\S]*?)`{3}/g, (_match, _lang, code) => `<pre><code>${code.trim()}</code></pre>`)
         .replace(/`([^`]+)`/g, '<code>$1</code>')
         .replace(/^- (.+)$/gm, '<li>$1</li>')
         .replace(/(<li>.*<\/li>\n?)+/g, '<ul>$&</ul>')
