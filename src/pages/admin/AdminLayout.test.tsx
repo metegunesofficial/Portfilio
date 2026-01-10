@@ -14,6 +14,17 @@ vi.mock('react-router-dom', async () => {
     }
 })
 
+// Mock useAuth
+const mockLogout = vi.fn()
+vi.mock('../../context/AuthContext', () => ({
+    useAuth: () => ({
+        user: { email: 'admin@example.com' },
+        logout: mockLogout,
+        loading: false,
+        isConfigured: true
+    })
+}))
+
 const renderWithRouter = (component: React.ReactNode) => {
     return render(
         <MemoryRouter initialEntries={['/admin/dashboard']}>
@@ -104,6 +115,7 @@ describe('AdminLayout', () => {
             const logoutBtn = screen.getByText('Çıkış')
             await user.click(logoutBtn)
 
+            expect(mockLogout).toHaveBeenCalled()
             expect(sessionStorage.getItem('admin_auth')).toBeNull()
             expect(mockNavigate).toHaveBeenCalledWith('/admin')
         })

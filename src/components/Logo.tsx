@@ -77,6 +77,7 @@ export function Logo() {
                 alignItems: 'center',
                 justifyContent: 'center'
             }}
+            aria-label="Home - Mete Güneş"
         >
             <MGLogoSVG />
         </motion.a>

@@ -14,6 +14,15 @@ vi.mock('react-router-dom', async () => {
     }
 })
 
+// Mock useAuth
+const mockLogin = vi.fn()
+vi.mock('../../context/AuthContext', () => ({
+    useAuth: () => ({
+        login: mockLogin,
+        isConfigured: true
+    })
+}))
+
 const renderWithRouter = (component: React.ReactNode) => {
     return render(
         <MemoryRouter>
@@ -26,6 +35,7 @@ describe('AdminLogin', () => {
     beforeEach(() => {
         vi.clearAllMocks()
         sessionStorage.clear()
+        mockLogin.mockResolvedValue(true)
     })
 
     describe('rendering', () => {
@@ -46,7 +56,7 @@ describe('AdminLogin', () => {
 
         it('renders password placeholder', () => {
             renderWithRouter(<AdminLogin />)
-            expect(screen.getByPlaceholderText('Admin şifresini girin')).toBeInTheDocument()
+            expect(screen.getByPlaceholderText('••••••••')).toBeInTheDocument()
         })
 
         it('renders submit button', () => {
@@ -102,34 +112,42 @@ describe('AdminLogin', () => {
             const input = screen.getByLabelText('Şifre')
             await user.type(input, 'test')
 
+            const emailInput = screen.getByLabelText('Email')
+            await user.type(emailInput, 'test@example.com')
+
             const submitBtn = screen.getByRole('button', { name: 'Giriş Yap' })
             expect(submitBtn).not.toBeDisabled()
         })
     })
 
     describe('form submission', () => {
-        beforeEach(() => {
-            vi.useFakeTimers()
-        })
-
-        afterEach(() => {
-            vi.useRealTimers()
-        })
+        // Removing fake timers and async act for simplicity and reliability in JSDOM
 
         it('shows loading state during submission', async () => {
             const user = userEvent.setup()
+            // Create a promise that we can resolve manually
+            let resolveLogin: (value: boolean) => void;
+            const loginPromise = new Promise<boolean>(resolve => {
+                resolveLogin = resolve;
+            });
+            mockLogin.mockReturnValue(loginPromise)
+
             renderWithRouter(<AdminLogin />)
 
+            const emailInput = screen.getByLabelText('Email')
+            await user.type(emailInput, 'test@example.com')
+
             const input = screen.getByLabelText('Şifre')
-            await user.type(input, 'wrongpassword')
+            await user.type(input, 'password')
 
             const submitBtn = screen.getByRole('button', { name: 'Giriş Yap' })
             await user.click(submitBtn)
 
             expect(screen.getByText('Giriş yapılıyor...')).toBeInTheDocument()
 
+            // Resolve the promise to complete the flow
             await act(async () => {
-                vi.advanceTimersByTime(500)
+                resolveLogin!(true)
             })
 
             await waitFor(() => {
@@ -138,8 +156,13 @@ describe('AdminLogin', () => {
         })
 
         it('shows error on wrong password', async () => {
-            const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime })
+            const user = userEvent.setup()
+            mockLogin.mockResolvedValue(false)
+
             renderWithRouter(<AdminLogin />)
+
+            const emailInput = screen.getByLabelText('Email')
+            await user.type(emailInput, 'test@example.com')
 
             const input = screen.getByLabelText('Şifre')
             await user.type(input, 'wrongpassword')
@@ -147,28 +170,25 @@ describe('AdminLogin', () => {
             const submitBtn = screen.getByRole('button', { name: 'Giriş Yap' })
             await user.click(submitBtn)
 
-            await act(async () => {
-                vi.advanceTimersByTime(500)
-            })
-
             await waitFor(() => {
-                expect(screen.getByText('Yanlış şifre. Lütfen tekrar deneyin.')).toBeInTheDocument()
+                expect(screen.getByText('Giriş başarısız. Email veya şifrenizi kontrol edin.')).toBeInTheDocument()
             })
         })
 
         it('navigates to dashboard on correct password', async () => {
-            const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime })
+            const user = userEvent.setup()
+            mockLogin.mockResolvedValue(true)
+
             renderWithRouter(<AdminLogin />)
+
+            const emailInput = screen.getByLabelText('Email')
+            await user.type(emailInput, 'test@example.com')
 
             const input = screen.getByLabelText('Şifre')
             await user.type(input, 'admin123')
 
             const submitBtn = screen.getByRole('button', { name: 'Giriş Yap' })
             await user.click(submitBtn)
-
-            await act(async () => {
-                vi.advanceTimersByTime(500)
-            })
 
             await waitFor(() => {
                 expect(mockNavigate).toHaveBeenCalledWith('/admin/dashboard')
@@ -176,18 +196,19 @@ describe('AdminLogin', () => {
         })
 
         it('sets session storage on successful login', async () => {
-            const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime })
+            const user = userEvent.setup()
+            mockLogin.mockResolvedValue(true)
+
             renderWithRouter(<AdminLogin />)
+
+            const emailInput = screen.getByLabelText('Email')
+            await user.type(emailInput, 'test@example.com')
 
             const input = screen.getByLabelText('Şifre')
             await user.type(input, 'admin123')
 
             const submitBtn = screen.getByRole('button', { name: 'Giriş Yap' })
             await user.click(submitBtn)
-
-            await act(async () => {
-                vi.advanceTimersByTime(500)
-            })
 
             await waitFor(() => {
                 expect(sessionStorage.getItem('admin_auth')).toBe('true')

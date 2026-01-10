@@ -15,6 +15,7 @@ const createMockClient = () => {
         order: vi.fn(),
         limit: vi.fn(),
         single: vi.fn(),
+        maybeSingle: vi.fn(),
         channel: vi.fn()
     }
 
@@ -30,6 +31,7 @@ const createMockClient = () => {
     mock.order.mockReturnValue(mock)
     mock.limit.mockReturnValue(mock)
     mock.single.mockReturnValue(mock)
+    mock.maybeSingle.mockReturnValue(mock)
     mock.channel.mockReturnValue({ on: vi.fn().mockReturnThis(), subscribe: vi.fn() })
 
     // Default then for promise resolution
@@ -65,9 +67,11 @@ describe('Newsletter Service', () => {
         it('subscribes a new email', async () => {
             const newSubscriber = { id: '123', email: 'test@example.com', status: 'active' }
 
-            // Mock single() to resolve sequentially
+            // Mock maybeSingle() to resolve sequentially
+            mockClient.maybeSingle
+                .mockImplementationOnce(() => Promise.resolve({ data: null, error: null }))
+
             mockClient.single
-                .mockImplementationOnce(() => Promise.resolve({ data: null, error: { code: 'PGRST116' } }))
                 .mockImplementationOnce(() => Promise.resolve({ data: newSubscriber, error: null }))
                 .mockImplementationOnce(() => Promise.resolve({ data: { id: 'token123' }, error: null }))
 
@@ -80,7 +84,7 @@ describe('Newsletter Service', () => {
         it('returns error for already subscribed email', async () => {
             const existingSubscriber = { id: '123', email: 'test@example.com', status: 'active' }
 
-            mockClient.single.mockImplementationOnce(() => Promise.resolve({ data: existingSubscriber, error: null }))
+            mockClient.maybeSingle.mockImplementationOnce(() => Promise.resolve({ data: existingSubscriber, error: null }))
 
             const result = await subscribeToNewsletter('test@example.com')
 
@@ -92,8 +96,10 @@ describe('Newsletter Service', () => {
             const existingSubscriber = { id: '123', email: 'test@example.com', status: 'unsubscribed' }
             const reactivatedSubscriber = { ...existingSubscriber, status: 'active' }
 
-            mockClient.single
+            mockClient.maybeSingle
                 .mockImplementationOnce(() => Promise.resolve({ data: existingSubscriber, error: null }))
+
+            mockClient.single
                 .mockImplementationOnce(() => Promise.resolve({ data: reactivatedSubscriber, error: null }))
 
             const result = await subscribeToNewsletter('test@example.com')
