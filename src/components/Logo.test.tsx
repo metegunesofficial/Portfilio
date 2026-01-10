@@ -18,11 +18,6 @@ describe('Logo', () => {
             expect(container).toBeDefined()
         })
 
-        it('renders the logo text', () => {
-            renderWithRouter(<Logo />)
-            expect(screen.getByText('METE GÜNEŞ')).toBeInTheDocument()
-        })
-
         it('renders as a link', () => {
             renderWithRouter(<Logo />)
             const link = screen.getByRole('link')
@@ -34,6 +29,11 @@ describe('Logo', () => {
             const link = screen.getByRole('link')
             expect(link).toHaveAttribute('href', '/')
         })
+
+        it('contains the SVG logo', () => {
+            const { container } = renderWithRouter(<Logo />)
+            expect(container.querySelector('svg')).toBeInTheDocument()
+        })
     })
 
     describe('styling', () => {
@@ -41,14 +41,6 @@ describe('Logo', () => {
             renderWithRouter(<Logo />)
             const link = screen.getByRole('link')
             expect(link).toHaveClass('sidebar-logo-custom')
-        })
-
-        it('contains text with proper styling', () => {
-            renderWithRouter(<Logo />)
-            const text = screen.getByText('METE GÜNEŞ')
-            expect(text).toBeInTheDocument()
-            // Check inline styles
-            expect(text).toHaveStyle({ fontWeight: '700' })
         })
     })
 })
