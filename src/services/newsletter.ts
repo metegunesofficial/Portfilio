@@ -21,11 +21,16 @@ export async function subscribeToNewsletter(
     const supabase = getSupabaseClient()
 
     // Email zaten kayıtlı mı kontrol et
-    const { data: existing } = await supabase
+    const { data: existing, error: selectError } = await supabase
         .from('newsletter_subscribers')
         .select('*')
         .eq('email', email.toLowerCase().trim())
-        .single()
+        .maybeSingle()
+
+    if (selectError) {
+        console.error('Newsletter select error:', selectError)
+        return { success: false, error: selectError.message }
+    }
 
     if (existing) {
         // Eğer unsubscribed ise tekrar aktif yap
