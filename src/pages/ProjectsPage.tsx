@@ -1,120 +1,110 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ArrowUpRight, Filter } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { useLang } from '../context/LangContext'
 import { SkeletonCard } from '../components/ui/Skeleton'
+import { getSupabaseClient } from '../lib/supabase-client'
 
-type Category = 'all' | 'ai' | 'web' | 'automation' | 'mobile'
+
 
 interface Project {
     id: string
     slug: string
-    title: { en: string; tr: string }
-    description: { en: string; tr: string }
-    category: Category
-    categoryLabel: { en: string; tr: string }
+    title_tr: string
+    title_en: string
+    description_tr: string | null
+    description_en: string | null
+    category: string | null
     tech: string[]
-    link?: string
-    image?: string
+    link?: string | null
+    image_url?: string | null
+    featured: boolean
+    published: boolean
 }
 
-const projects: Project[] = [
+// Fallback data
+const fallbackProjects: Project[] = [
     {
         id: '1',
         slug: 'ai-chatbot-integration',
-        title: { en: 'AI Chatbot Integration', tr: 'AI Chatbot Entegrasyonu' },
-        description: {
-            en: 'Custom ChatGPT-powered chatbot for e-commerce customer support with 40% faster response time.',
-            tr: 'E-ticaret müşteri desteği için ChatGPT destekli özel chatbot, %40 daha hızlı yanıt süresi.'
-        },
-        category: 'ai',
-        categoryLabel: { en: 'AI Integration', tr: 'AI Entegrasyonu' },
-        tech: ['ChatGPT API', 'LangChain', 'Node.js', 'React']
+        title_tr: 'AI Chatbot Entegrasyonu',
+        title_en: 'AI Chatbot Integration',
+        description_tr: 'E-ticaret müşteri desteği için ChatGPT destekli özel chatbot.',
+        description_en: 'Custom ChatGPT-powered chatbot for e-commerce customer support.',
+        category: 'AI',
+        tech: ['ChatGPT API', 'LangChain', 'Node.js', 'React'],
+        featured: true,
+        published: true
     },
     {
         id: '2',
         slug: 'workflow-automation-suite',
-        title: { en: 'Workflow Automation Suite', tr: 'İş Akışı Otomasyon Paketi' },
-        description: {
-            en: 'End-to-end automation solution reducing manual tasks by 60% for a finance company.',
-            tr: 'Bir finans şirketi için manuel görevleri %60 azaltan uçtan uca otomasyon çözümü.'
-        },
-        category: 'automation',
-        categoryLabel: { en: 'Automation', tr: 'Otomasyon' },
-        tech: ['n8n', 'Zapier', 'Python', 'REST APIs']
+        title_tr: 'İş Akışı Otomasyon Paketi',
+        title_en: 'Workflow Automation Suite',
+        description_tr: 'Manuel görevleri %60 azaltan uçtan uca otomasyon çözümü.',
+        description_en: 'End-to-end automation solution reducing manual tasks by 60%.',
+        category: 'Automation',
+        tech: ['n8n', 'Zapier', 'Python', 'REST APIs'],
+        featured: true,
+        published: true
     },
     {
         id: '3',
         slug: 'saas-dashboard',
-        title: { en: 'SaaS Analytics Dashboard', tr: 'SaaS Analiz Paneli' },
-        description: {
-            en: 'Real-time analytics dashboard with interactive charts and data visualization.',
-            tr: 'Etkileşimli grafikler ve veri görselleştirme ile gerçek zamanlı analiz paneli.'
-        },
-        category: 'web',
-        categoryLabel: { en: 'Web App', tr: 'Web Uygulama' },
-        tech: ['React', 'TypeScript', 'Supabase', 'Recharts']
-    },
-    {
-        id: '4',
-        slug: 'ai-content-generator',
-        title: { en: 'AI Content Generator', tr: 'AI İçerik Üretici' },
-        description: {
-            en: 'Multi-language content generation tool using GPT-4 with brand voice customization.',
-            tr: 'Marka sesi özelleştirmeli GPT-4 kullanan çok dilli içerik üretim aracı.'
-        },
-        category: 'ai',
-        categoryLabel: { en: 'AI Tool', tr: 'AI Araç' },
-        tech: ['GPT-4', 'Next.js', 'Prisma', 'PostgreSQL']
-    },
-    {
-        id: '5',
-        slug: 'ecommerce-platform',
-        title: { en: 'E-commerce Platform', tr: 'E-ticaret Platformu' },
-        description: {
-            en: 'Full-featured e-commerce solution with payment integration and inventory management.',
-            tr: 'Ödeme entegrasyonu ve envanter yönetimi ile tam özellikli e-ticaret çözümü.'
-        },
-        category: 'web',
-        categoryLabel: { en: 'E-commerce', tr: 'E-ticaret' },
-        tech: ['Next.js', 'Stripe', 'Supabase', 'Tailwind']
-    },
-    {
-        id: '6',
-        slug: 'invoice-automation',
-        title: { en: 'Invoice Automation System', tr: 'Fatura Otomasyon Sistemi' },
-        description: {
-            en: 'Automated invoice processing with OCR and accounting software integration.',
-            tr: 'OCR ve muhasebe yazılımı entegrasyonu ile otomatik fatura işleme.'
-        },
-        category: 'automation',
-        categoryLabel: { en: 'Business Automation', tr: 'İş Otomasyonu' },
-        tech: ['Python', 'OCR', 'REST APIs', 'PostgreSQL']
+        title_tr: 'SaaS Analiz Paneli',
+        title_en: 'SaaS Analytics Dashboard',
+        description_tr: 'Etkileşimli grafikler ve veri görselleştirme ile gerçek zamanlı analiz paneli.',
+        description_en: 'Real-time analytics dashboard with interactive charts and data visualization.',
+        category: 'Web',
+        tech: ['React', 'TypeScript', 'Supabase', 'Recharts'],
+        featured: false,
+        published: true
     }
 ]
 
-const categories: { value: Category; label: { en: string; tr: string } }[] = [
+const categories = [
     { value: 'all', label: { en: 'All Projects', tr: 'Tüm Projeler' } },
-    { value: 'ai', label: { en: 'AI & ML', tr: 'AI & ML' } },
-    { value: 'web', label: { en: 'Web Apps', tr: 'Web Uygulamaları' } },
-    { value: 'automation', label: { en: 'Automation', tr: 'Otomasyon' } },
+    { value: 'AI', label: { en: 'AI & ML', tr: 'AI & ML' } },
+    { value: 'Web', label: { en: 'Web Apps', tr: 'Web Uygulamaları' } },
+    { value: 'Automation', label: { en: 'Automation', tr: 'Otomasyon' } },
 ]
 
 export function ProjectsPage() {
     const { lang } = useLang()
-    const [filter, setFilter] = useState<Category>('all')
-    const [isLoading, setIsLoading] = useState(false)
+    const [filter, setFilter] = useState<string>('all')
+    const [projects, setProjects] = useState<Project[]>([])
+    const [isLoading, setIsLoading] = useState(true)
+
+    useEffect(() => {
+        fetchProjects()
+    }, [])
+
+    const fetchProjects = async () => {
+        try {
+            const supabase = getSupabaseClient()
+            const { data, error } = await supabase
+                .from('projects')
+                .select('*')
+                .eq('published', true)
+                .order('order_index', { ascending: true })
+
+            if (error) throw error
+            setProjects(data && data.length > 0 ? data : fallbackProjects)
+        } catch (err) {
+            console.error('Error fetching projects:', err)
+            setProjects(fallbackProjects)
+        } finally {
+            setIsLoading(false)
+        }
+    }
 
     const filteredProjects = filter === 'all'
         ? projects
-        : projects.filter(p => p.category === filter)
+        : projects.filter(p => p.category?.toLowerCase() === filter.toLowerCase())
 
-    const handleFilterChange = (newFilter: Category) => {
-        setIsLoading(true)
+    const handleFilterChange = (newFilter: string) => {
         setFilter(newFilter)
-        // Simulate loading for smooth transition
-        setTimeout(() => setIsLoading(false), 300)
     }
 
     return (
@@ -127,8 +117,8 @@ export function ProjectsPage() {
             >
                 <h1>{lang === 'tr' ? 'Projeler' : 'Projects'}</h1>
                 <p>{lang === 'tr'
-                    ? 'AI entegrasyonu, otomasyon ve web geliştirme projelerim'
-                    : 'My AI integration, automation, and web development projects'
+                    ? 'Geliştirdiğim projeler ve çalışmalarım'
+                    : 'Projects and case studies'
                 }</p>
             </motion.header>
 
@@ -151,56 +141,59 @@ export function ProjectsPage() {
                 ))}
             </motion.div>
 
-            {/* Projects Grid */}
-            <div className="card-grid">
-                <AnimatePresence mode="wait">
-                    {isLoading ? (
-                        // Skeleton loading
-                        <>
-                            {[1, 2, 3].map((i) => (
-                                <SkeletonCard key={i} />
-                            ))}
-                        </>
-                    ) : (
-                        filteredProjects.map((project, index) => (
+            {isLoading ? (
+                <div className="project-grid">
+                    {[1, 2, 3].map(i => <SkeletonCard key={i} />)}
+                </div>
+            ) : (
+                <motion.div className="project-grid" layout>
+                    <AnimatePresence mode="popLayout">
+                        {filteredProjects.map((project, index) => (
                             <motion.div
                                 key={project.id}
-                                className="content-card"
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                exit={{ opacity: 0, y: -20 }}
-                                transition={{ delay: index * 0.1 }}
-                                whileHover={{ y: -6 }}
+                                className="project-card"
+                                initial={{ opacity: 0, scale: 0.9 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                exit={{ opacity: 0, scale: 0.9 }}
+                                transition={{ delay: index * 0.05 }}
+                                whileHover={{ y: -5 }}
                             >
-                                <Link to={`/projects/${project.slug}`} className="card-link">
-                                    <div className="card-image">
-                                        <span className="card-emoji">
-                                            {project.category === 'ai' ? '🤖' :
-                                                project.category === 'automation' ? '⚡' : '💻'}
-                                        </span>
+                                <Link to={`/projects/${project.slug}`} className="project-link">
+                                    <div className="project-image">
+                                        {project.image_url ? (
+                                            <img src={project.image_url} alt={lang === 'tr' ? project.title_tr : project.title_en} />
+                                        ) : (
+                                            <div className="project-placeholder">
+                                                <span>🚀</span>
+                                            </div>
+                                        )}
                                     </div>
-                                    <div className="card-body">
-                                        <span className="card-category">{project.categoryLabel[lang]}</span>
-                                        <h3 className="card-title">{project.title[lang]}</h3>
-                                        <p className="card-excerpt">{project.description[lang]}</p>
-                                        <div className="card-tech">
-                                            {project.tech.slice(0, 3).map((t, i) => (
-                                                <span key={i} className="tech-tag">{t}</span>
+                                    <div className="project-content">
+                                        <span className="project-category">{project.category}</span>
+                                        <h3 className="project-title">
+                                            {lang === 'tr' ? project.title_tr : project.title_en}
+                                        </h3>
+                                        <p className="project-description">
+                                            {lang === 'tr' ? project.description_tr : project.description_en}
+                                        </p>
+                                        <div className="project-tech">
+                                            {project.tech?.slice(0, 4).map((tech, i) => (
+                                                <span key={i} className="tech-badge">{tech}</span>
                                             ))}
                                         </div>
-                                        <div className="card-footer">
-                                            <span className="card-action">
-                                                {lang === 'tr' ? 'Detay' : 'View'}
+                                        <div className="project-footer">
+                                            <span className="view-project">
+                                                {lang === 'tr' ? 'Detayları Gör' : 'View Details'}
+                                                <ArrowUpRight size={16} />
                                             </span>
-                                            <ArrowUpRight size={16} className="card-arrow" />
                                         </div>
                                     </div>
                                 </Link>
                             </motion.div>
-                        ))
-                    )}
-                </AnimatePresence>
-            </div>
+                        ))}
+                    </AnimatePresence>
+                </motion.div>
+            )}
         </div>
     )
 }

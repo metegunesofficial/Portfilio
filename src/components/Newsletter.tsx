@@ -2,12 +2,12 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { AlertCircle, CheckCircle, Mail } from 'lucide-react'
 import { useLang } from '../context/LangContext'
+import { subscribeToNewsletter } from '../services/newsletter'
 
 export function Newsletter() {
     const { lang, t } = useLang()
     const [email, setEmail] = useState('')
     const [error, setError] = useState('')
-    const [touched, setTouched] = useState(false)
     const [submitted, setSubmitted] = useState(false)
     const [isSubmitting, setIsSubmitting] = useState(false)
 
@@ -17,7 +17,8 @@ export function Newsletter() {
         noAt: lang === 'tr' ? 'E-posta adresi @ işareti içermeli' : 'Email must contain @ symbol',
         noDomain: lang === 'tr' ? 'E-posta adresi bir alan adı içermeli (örn: gmail.com)' : 'Email must contain a domain (e.g., gmail.com)',
         invalidChars: lang === 'tr' ? 'E-posta adresi geçersiz karakterler içeriyor' : 'Email contains invalid characters',
-        tooShort: lang === 'tr' ? 'E-posta adresi çok kısa' : 'Email address is too short'
+        tooShort: lang === 'tr' ? 'E-posta adresi çok kısa' : 'Email address is too short',
+        alreadySubscribed: lang === 'tr' ? 'Bu e-posta adresi zaten bültenimize kayıtlı' : 'This email is already subscribed to our newsletter'
     }
 
     const validateEmail = (value: string): string => {
@@ -69,7 +70,6 @@ export function Newsletter() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
-        setTouched(true)
 
         const validationError = validateEmail(email)
         if (validationError) {
@@ -78,20 +78,33 @@ export function Newsletter() {
         }
 
         setIsSubmitting(true)
+        setError('')
 
-        // Simulate API call
-        await new Promise(resolve => setTimeout(resolve, 1000))
+        try {
+            // Call the actual newsletter service
+            const result = await subscribeToNewsletter(email.trim(), undefined, 'website_form')
 
-        // Track event
-        if (typeof window !== 'undefined' && (window as any).gtag) {
-            (window as any).gtag('event', 'newsletter_signup', {
-                event_category: 'engagement'
-            })
+            if (!result.success) {
+                setError(result.error || errorMessages.alreadySubscribed)
+                setIsSubmitting(false)
+                return
+            }
+
+            // Track event
+            if (typeof window !== 'undefined' && (window as any).gtag) {
+                (window as any).gtag('event', 'newsletter_signup', {
+                    event_category: 'engagement'
+                })
+            }
+
+            setIsSubmitting(false)
+            setSubmitted(true)
+            setEmail('')
+        } catch (err) {
+            console.error('Newsletter subscription error:', err)
+            setError(lang === 'tr' ? 'Bir hata oluştu. Lütfen tekrar deneyin.' : 'An error occurred. Please try again.')
+            setIsSubmitting(false)
         }
-
-        setIsSubmitting(false)
-        setSubmitted(true)
-        setEmail('')
     }
 
     return (
