@@ -1,19 +1,19 @@
 import { motion } from 'framer-motion'
 
-// MG Logo SVG Component
+// MG Logo SVG Component - Clean minimal version
 function MGLogoSVG() {
     return (
         <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 120 120"
             fill="none"
-            width="36"
-            height="36"
+            width="48"
+            height="48"
         >
             {/* Main M Letter */}
             <path
                 d="M20 95 L20 35 L38 60 L56 35 L56 95"
-                stroke="#f5f1eb"
+                stroke="#1a1a1a"
                 strokeWidth="8"
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -23,7 +23,7 @@ function MGLogoSVG() {
             {/* G Letter integrated with M */}
             <path
                 d="M60 50 C60 32, 85 28, 98 40 M98 50 L98 75 C98 92, 70 95, 58 80 M98 70 L80 70"
-                stroke="#f5f1eb"
+                stroke="#1a1a1a"
                 strokeWidth="8"
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -52,33 +52,16 @@ export function Logo() {
         <motion.a
             href="/"
             className="sidebar-logo-custom"
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            style={{ textDecoration: 'none' }}
-        >
-            <div style={{
-                background: '#1a1a1a',
-                borderRadius: '12px',
-                padding: '8px 16px',
-                height: '52px',
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            style={{
+                textDecoration: 'none',
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'center',
-                gap: '10px',
-                boxShadow: '0 2px 10px rgba(0,0,0,0.1)'
-            }}>
-                <MGLogoSVG />
-                <span style={{
-                    fontFamily: '"Space Grotesk", sans-serif',
-                    fontWeight: 700,
-                    fontSize: '13px',
-                    color: '#f5f1eb',
-                    letterSpacing: '0.08em',
-                    whiteSpace: 'nowrap'
-                }}>
-                    METE GÜNEŞ
-                </span>
-            </div>
+                justifyContent: 'center'
+            }}
+        >
+            <MGLogoSVG />
         </motion.a>
     )
 }
