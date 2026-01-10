@@ -5,32 +5,35 @@
       <stop offset="0%" stop-color="#1a1a1a"/>
       <stop offset="100%" stop-color="#2d2d2d"/>
     </linearGradient>
-    <linearGradient id="iconGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#e8e4df"/>
-      <stop offset="100%" stop-color="#d4cfc8"/>
-    </linearGradient>
   </defs>
   
   <!-- Background -->
-  <rect width="32" height="32" rx="8" fill="url(#bgGradient)"/>
+  <rect width="32" height="32" rx="6" fill="url(#bgGradient)"/>
   
-  <!-- Abstract G shape -->
-  <path
-    d="M16 8C11.6 8 8 11.6 8 16C8 20.4 11.6 24 16 24C18.2 24 20.1 23.1 21.5 21.7"
-    stroke="url(#iconGradient)"
-    stroke-width="2"
-    stroke-linecap="round"
-    fill="none"
-  />
-  <path
-    d="M16 12V20H20"
-    stroke="url(#iconGradient)"
-    stroke-width="2"
-    stroke-linecap="round"
+  <!-- MG Monogram - Scaled for 32x32 -->
+  <!-- M Letter -->
+  <path 
+    d="M5 25.5 L5 9.5 L10 15.5 L15 9.5 L15 25.5" 
+    stroke="#f5f1eb" 
+    stroke-width="2" 
+    stroke-linecap="round" 
     stroke-linejoin="round"
     fill="none"
   />
   
-  <!-- Accent dot -->
-  <circle cx="22" cy="9" r="2" fill="#e8e4df"/>
+  <!-- G Letter -->
+  <path 
+    d="M16 13 C16 8.5, 23 7.5, 26 11 M26 13 L26 20 C26 25, 19 26, 15.5 21.5 M26 18.5 L22 18.5" 
+    stroke="#f5f1eb" 
+    stroke-width="2" 
+    stroke-linecap="round" 
+    stroke-linejoin="round"
+    fill="none"
+  />
+  
+  <!-- Tech Circuit Nodes - Blue Accents -->
+  <circle cx="5" cy="25.5" r="1.5" fill="#3b82f6"/>
+  <circle cx="15" cy="25.5" r="1.5" fill="#3b82f6"/>
+  <circle cx="10" cy="15.5" r="1.2" fill="#3b82f6"/>
+  <circle cx="26" cy="18.5" r="1.2" fill="#3b82f6"/>
 </svg>

@@ -1,11 +1,11 @@
-# robots.txt for metegunes.dev
+# robots.txt for metegunes.io
 # AI-friendly portfolio website
 
 User-agent: *
 Allow: /
 
 # Sitemap
-Sitemap: https://metegunes.dev/sitemap.xml
+Sitemap: https://metegunes.io/sitemap.xml
 
 # Disallow
 Disallow: /api/
