@@ -60,6 +60,7 @@ export function BlogsPage() {
     const [filter, setFilter] = useState<string>('all')
     const [posts, setPosts] = useState<BlogPost[]>([])
     const [isLoading, setIsLoading] = useState(true)
+    const [isFilterOpen, setIsFilterOpen] = useState(false)
 
     useEffect(() => {
         fetchBlogs()
@@ -119,21 +120,35 @@ export function BlogsPage() {
 
             {/* Filter Buttons */}
             <motion.div
-                className="filter-buttons"
+                className="filter-section"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.2 }}
             >
-                <Filter size={18} className="filter-icon" />
-                {categories.map((cat) => (
-                    <button
-                        key={cat.value}
-                        className={`filter-btn ${filter === cat.value ? 'active' : ''}`}
-                        onClick={() => setFilter(cat.value)}
-                    >
-                        {cat.label[lang]}
-                    </button>
-                ))}
+                <button
+                    className="filter-toggle-btn"
+                    onClick={() => setIsFilterOpen(!isFilterOpen)}
+                    aria-expanded={isFilterOpen}
+                >
+                    <Filter size={18} />
+                    <span>{lang === 'tr' ? 'Filtrele' : 'Filter'}</span>
+                    <span className={`filter-arrow ${isFilterOpen ? 'open' : ''}`}>▼</span>
+                </button>
+
+                <div className={`filter-buttons ${isFilterOpen ? 'open' : ''}`}>
+                    {categories.map((cat) => (
+                        <button
+                            key={cat.value}
+                            className={`filter-btn ${filter === cat.value ? 'active' : ''}`}
+                            onClick={() => {
+                                setFilter(cat.value)
+                                setIsFilterOpen(false)
+                            }}
+                        >
+                            {cat.label[lang]}
+                        </button>
+                    ))}
+                </div>
             </motion.div>
 
             {isLoading ? (
