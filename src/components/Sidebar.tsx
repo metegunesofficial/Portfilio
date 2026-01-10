@@ -20,7 +20,7 @@ const XIcon = ({ size = 16 }: { size?: number }) => (
 
 const socialLinks = [
     { icon: Linkedin, href: 'https://www.linkedin.com/in/metegunesofficial', label: 'LinkedIn' },
-    { icon: Instagram, href: 'https://www.instagram.com/metegunesofficial/', label: 'Instagram' },
+    { icon: Instagram, href: 'https://www.instagram.com/metegunesconsulting/', label: 'Instagram' },
     { icon: TikTok, href: 'https://www.tiktok.com/@metegunesofficial', label: 'TikTok' },
     { icon: XIcon, href: 'https://x.com/metegnsofficial', label: 'X' },
     { icon: Github, href: 'https://github.com/metegunesofficial', label: 'GitHub' },
