@@ -16,7 +16,8 @@ export interface SubscribeResult {
 export async function subscribeToNewsletter(
     email: string,
     name?: string,
-    source: string = 'website'
+    source: string = 'website',
+    preferredLanguage: 'tr' | 'en' = 'tr'
 ): Promise<SubscribeResult> {
     const supabase = getSupabaseClient()
 
@@ -40,7 +41,8 @@ export async function subscribeToNewsletter(
                 .update({
                     status: 'active',
                     unsubscribed_at: null,
-                    subscribed_at: new Date().toISOString()
+                    subscribed_at: new Date().toISOString(),
+                    preferred_language: preferredLanguage
                 })
                 .eq('id', existing.id)
                 .select()
@@ -67,7 +69,8 @@ export async function subscribeToNewsletter(
             name: name || null,
             source,
             status: 'active',
-            subscribed_at: new Date().toISOString()
+            subscribed_at: new Date().toISOString(),
+            preferred_language: preferredLanguage
         })
         .select()
         .single()

@@ -71,7 +71,7 @@ const translations: Record<Lang, Translations> = {
         contact: 'Contact',
 
         heroTitle: 'Hey, I\'m Mete',
-        heroBio: "I'm an AI & Automation Specialist with 2+ years of experience transforming complex business challenges into elegant digital solutions. I specialize in AI integration, workflow automation, and full-stack web development. From rapid MVP prototypes to enterprise-scale systems, I help businesses leverage cutting-edge technology to boost efficiency and drive growth.",
+        heroBio: "I'm an AI & Automation Specialist with 4+ years of experience transforming complex business challenges into elegant digital solutions. I specialize in AI integration, workflow automation, data analysis & reporting, and full-stack web development. From rapid MVP prototypes to enterprise-scale systems, I help businesses leverage cutting-edge technology to boost efficiency and drive growth.",
 
         newsletterTitle: 'Newsletter',
         newsletterDesc: "I share insights on AI, automation, and tech trends monthly. No spam, just actionable value.",
@@ -124,7 +124,7 @@ const translations: Record<Lang, Translations> = {
         contact: 'İletişim',
 
         heroTitle: 'Merhaba, Ben Mete',
-        heroBio: "2+ yıllık deneyime sahip bir AI, Otomasyon ve Süreç Geliştirme Uzmanıyım. Karmaşık iş süreçlerini profesyonel dijital çözümlere dönüştürüyorum. AI entegrasyonu, iş akışı otomasyonu ve kurumsal süreç geliştirme konularında uzmanım. Hızlı MVP prototiplerinden kurumsal ölçekli sistemlere kadar, işletmelerin son teknolojiyi kullanarak verimliliği artırmasına ve büyümesine yardımcı oluyorum.",
+        heroBio: "4+ yıllık deneyime sahip bir AI, Otomasyon ve Süreç Geliştirme Uzmanıyım. Karmaşık iş süreçlerini profesyonel dijital çözümlere dönüştürüyorum. AI entegrasyonu, iş akışı otomasyonu, veri analizi & raporlama ve kurumsal süreç geliştirme konularında uzmanım. Hızlı MVP prototiplerinden kurumsal ölçekli sistemlere kadar, işletmelerin son teknolojiyi kullanarak verimliliği artırmasına ve büyümesine yardımcı oluyorum.",
 
         newsletterTitle: 'Bülten',
         newsletterDesc: "Ayda bir öğrendiklerimi belgeliyorum. Bunları sizinle mail ile paylaşmak isterim. Spam yok. Sadece değer.",

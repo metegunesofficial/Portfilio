@@ -21,8 +21,8 @@ interface Settings {
 const defaultSettings: Settings = {
     hero_title_tr: 'Merhaba, Ben Mete',
     hero_title_en: "Hey, I'm Mete",
-    hero_bio_tr: "2+ yıllık deneyime sahip bir AI, Otomasyon ve Süreç Geliştirme Uzmanıyım.",
-    hero_bio_en: "I'm an AI & Automation Specialist with 2+ years of experience.",
+    hero_bio_tr: "4+ yıllık deneyime sahip bir AI, Otomasyon, Veri Analizi ve Süreç Geliştirme Uzmanıyım.",
+    hero_bio_en: "I'm an AI, Automation & Data Analytics Specialist with 4+ years of experience.",
     about_bio_tr: "AI ve otomasyon alanında uzmanım.",
     about_bio_en: "I specialize in AI and automation.",
     skills: ['AI', 'Automation', 'React', 'Node.js'],

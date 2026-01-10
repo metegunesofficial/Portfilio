@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom'
-import { Home, FileText, Mail, Linkedin, Twitter, UserCircle, Github, Instagram } from 'lucide-react'
+import { Home, FileText, Mail, Linkedin, UserCircle, Instagram, Github } from 'lucide-react'
 import { useLang } from '../context/LangContext'
 
 import { Logo } from './Logo'
@@ -11,13 +11,20 @@ const TikTok = ({ size = 16 }: { size?: number }) => (
     </svg>
 )
 
+// Custom X (formerly Twitter) icon
+const XIcon = ({ size = 16 }: { size?: number }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
+        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+    </svg>
+)
+
 const socialLinks = [
-    { icon: Linkedin, href: 'https://linkedin.com/in/metegunes', label: 'LinkedIn' },
-    { icon: Github, href: 'https://github.com/metegunes', label: 'GitHub' },
-    { icon: Twitter, href: 'https://twitter.com/metegunes', label: 'Twitter' },
-    { icon: Instagram, href: 'https://instagram.com/metegunes', label: 'Instagram' },
-    { icon: TikTok, href: 'https://tiktok.com/@metegunes', label: 'TikTok' },
-    { icon: Mail, href: 'mailto:contact@metegunes.dev', label: 'Email' },
+    { icon: Linkedin, href: 'https://www.linkedin.com/in/metegunesofficial', label: 'LinkedIn' },
+    { icon: Instagram, href: 'https://www.instagram.com/metegunesofficial/', label: 'Instagram' },
+    { icon: TikTok, href: 'https://www.tiktok.com/@metegunesofficial', label: 'TikTok' },
+    { icon: XIcon, href: 'https://x.com/metegnsofficial', label: 'X' },
+    { icon: Github, href: 'https://github.com/metegunesofficial', label: 'GitHub' },
+    { icon: Mail, href: 'mailto:metegunesofficial@gmail.com', label: 'Email' },
 ]
 
 export function Sidebar() {

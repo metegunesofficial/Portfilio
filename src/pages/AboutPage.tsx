@@ -81,8 +81,8 @@ export function AboutPage() {
                 <h1>{lang === 'tr' ? 'Hakkımda' : 'About Me'}</h1>
                 <p>
                     {lang === 'tr'
-                        ? 'AI ve otomasyon alanında 2+ yıllık deneyimle işletmelere dijital dönüşüm çözümleri sunuyorum.'
-                        : 'Delivering digital transformation solutions to businesses with 2+ years of experience in AI and automation.'
+                        ? 'AI, otomasyon ve veri analizi alanında 4+ yıllık deneyimle işletmelere dijital dönüşüm çözümleri sunuyorum.'
+                        : 'Delivering digital transformation solutions to businesses with 4+ years of experience in AI, automation and data analytics.'
                     }
                 </p>
             </motion.header>
@@ -101,8 +101,8 @@ export function AboutPage() {
                 <div className="bio-content">
                     <p>
                         {lang === 'tr'
-                            ? `2+ yıllık deneyime sahip bir AI, Otomasyon ve Süreç Geliştirme Uzmanıyım. Karmaşık iş süreçlerini profesyonel dijital çözümlere dönüştürüyorum.`
-                            : `I'm an AI, Automation and Process Development Specialist with 2+ years of experience. I transform complex business processes into professional digital solutions.`
+                            ? `4+ yıllık deneyime sahip bir AI, Otomasyon, Veri Analizi ve Süreç Geliştirme Uzmanıyım. Karmaşık iş süreçlerini profesyonel dijital çözümlere dönüştürüyorum.`
+                            : `I'm an AI, Automation, Data Analytics and Process Development Specialist with 4+ years of experience. I transform complex business processes into professional digital solutions.`
                         }
                     </p>
                     <p>

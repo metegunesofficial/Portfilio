@@ -2940,12 +2940,12 @@ body {
 
 .email-input-wrapper input {
   width: 100%;
-  padding-right: 48px;
+  padding-left: 44px;
 }
 
 .email-input-wrapper .input-icon {
   position: absolute;
-  right: 12px;
+  left: 14px;
   top: 50%;
   transform: translateY(-50%);
   color: var(--text-muted);
@@ -2987,7 +2987,9 @@ body {
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* Admin User Info */

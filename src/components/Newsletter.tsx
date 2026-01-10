@@ -82,7 +82,7 @@ export function Newsletter() {
 
         try {
             // Call the actual newsletter service
-            const result = await subscribeToNewsletter(email.trim(), undefined, 'website_form')
+            const result = await subscribeToNewsletter(email.trim(), undefined, 'website_form', lang)
 
             if (!result.success) {
                 setError(result.error || errorMessages.alreadySubscribed)
