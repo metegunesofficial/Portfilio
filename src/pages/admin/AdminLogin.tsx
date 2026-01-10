@@ -1,34 +1,45 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Lock, Eye, EyeOff } from 'lucide-react'
-
-// Admin şifresi - production'da .env'den alınmalı
-const ADMIN_PASSWORD = 'admin123'
+import { Lock, Eye, EyeOff, Mail } from 'lucide-react'
+import { useAuth } from '../../context/AuthContext'
 
 export function AdminLogin() {
+    const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [showPassword, setShowPassword] = useState(false)
     const [error, setError] = useState('')
     const [isLoading, setIsLoading] = useState(false)
     const navigate = useNavigate()
+    const { login, isConfigured } = useAuth()
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         setIsLoading(true)
         setError('')
 
-        // Simulate network delay
-        await new Promise(resolve => setTimeout(resolve, 500))
+        if (!isConfigured) {
+            setError('Supabase yapılandırılmamış. .env.local dosyasını kontrol edin.')
+            setIsLoading(false)
+            return
+        }
 
-        if (password === ADMIN_PASSWORD) {
-            // Store auth in sessionStorage
-            sessionStorage.setItem('admin_auth', 'true')
-            navigate('/admin/dashboard')
-        } else {
-            setError('Yanlış şifre. Lütfen tekrar deneyin.')
+        try {
+            const success = await login(email, password)
+            if (success) {
+                // Store auth in sessionStorage for backward compatibility
+                sessionStorage.setItem('admin_auth', 'true')
+                navigate('/admin/dashboard')
+            } else {
+                setError('Giriş başarısız. Email veya şifrenizi kontrol edin.')
+            }
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        } catch (_err) {
+            setError('Giriş yapılırken bir hata oluştu.')
         }
         setIsLoading(false)
     }
+
+    const isFormValid = email.trim() !== '' && password.trim() !== ''
 
     return (
         <div className="admin-login-page">
@@ -41,6 +52,23 @@ export function AdminLogin() {
 
                 <form onSubmit={handleSubmit} className="admin-login-form">
                     <div className="form-row">
+                        <label htmlFor="email">Email</label>
+                        <div className="email-input-wrapper">
+                            <input
+                                type="email"
+                                id="email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                placeholder="admin@example.com"
+                                autoFocus
+                            />
+                            <span className="input-icon">
+                                <Mail size={18} />
+                            </span>
+                        </div>
+                    </div>
+
+                    <div className="form-row">
                         <label htmlFor="password">Şifre</label>
                         <div className="password-input-wrapper">
                             <input
@@ -48,8 +76,7 @@ export function AdminLogin() {
                                 id="password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                placeholder="Admin şifresini girin"
-                                autoFocus
+                                placeholder="••••••••"
                             />
                             <button
                                 type="button"
@@ -70,7 +97,7 @@ export function AdminLogin() {
                     <button
                         type="submit"
                         className="btn-primary admin-submit"
-                        disabled={isLoading || !password}
+                        disabled={isLoading || !isFormValid}
                     >
                         {isLoading ? 'Giriş yapılıyor...' : 'Giriş Yap'}
                     </button>

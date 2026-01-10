@@ -2,6 +2,12 @@
     "mcpServers": {
         "Notion": {
             "url": "https://mcp.notion.com/mcp"
+        },
+        "Vercel": {
+            "url": "https://mcp.vercel.com/sse",
+            "headers": {
+                "Authorization": "Bearer L8rJjpy1nWR0Une5kmpADQOc"
+            }
         }
     }
 }

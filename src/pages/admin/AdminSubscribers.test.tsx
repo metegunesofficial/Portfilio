@@ -33,8 +33,8 @@ vi.mock('../../services/newsletter', () => ({
     }))
 }))
 
-// Mock URL for CSV export
-global.URL.createObjectURL = vi.fn()
+    // Mock URL for CSV export
+    ; (globalThis as any).URL = { createObjectURL: vi.fn() }
 
 const mockSubscribers = [
     {
@@ -63,6 +63,7 @@ const mockStats = {
     unsubscribed: 1,
     bounced: 1,
     thisMonth: 2,
+    lastMonth: 1,
     growthRate: 5
 }
 
@@ -168,6 +169,6 @@ describe('AdminSubscribers', () => {
         const exportBtn = screen.getByText('CSV İndir')
         fireEvent.click(exportBtn)
 
-        expect(global.URL.createObjectURL).toHaveBeenCalled()
+        expect((globalThis as any).URL.createObjectURL).toHaveBeenCalled()
     })
 })

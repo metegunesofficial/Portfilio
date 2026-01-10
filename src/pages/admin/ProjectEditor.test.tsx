@@ -114,8 +114,7 @@ describe('ProjectEditor', () => {
         render(<ProjectEditor />)
 
         const techInput = screen.getByPlaceholderText('React, Node.js...')
-        const addBtn = screen.getByRole('button', { name: /IconPlus/i }) // Assuming Plus icon renders accessible name differently or strictly by icon
-        // Or simply find by class since we mock icon:
+        // Find add button by class since we mock icon
         const addBtnByClass = screen.getAllByRole('button').find(b => b.className.includes('add-tech-btn'))
 
         fireEvent.change(techInput, { target: { value: 'React' } })

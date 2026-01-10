@@ -22,3 +22,24 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Vercel
+.vercel
+
+# Environment files (CRITICAL - never commit!)
+.env
+.env.*
+.env.local
+.env.*.local
+*.env
+
+# Gemini/AI assistant
+.gemini/
+
+# Supabase local
+supabase/.temp/
+
+# Secrets & Keys
+*.pem
+*.key
+secrets/

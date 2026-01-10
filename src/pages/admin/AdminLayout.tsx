@@ -1,12 +1,41 @@
+import { useEffect } from 'react'
 import { NavLink, Outlet, useNavigate } from 'react-router-dom'
 import { FileText, Briefcase, Settings, LogOut, LayoutDashboard, Home, Users, Mail } from 'lucide-react'
+import { useAuth } from '../../context/AuthContext'
 
 export function AdminLayout() {
     const navigate = useNavigate()
+    const { user, logout, loading, isConfigured } = useAuth()
 
-    const handleLogout = () => {
+    useEffect(() => {
+        // Auth yüklenirken bekle
+        if (loading) return
+
+        // Supabase yapılandırılmamışsa veya kullanıcı yoksa login'e yönlendir
+        if (!isConfigured || !user) {
+            navigate('/admin')
+        }
+    }, [user, loading, isConfigured, navigate])
+
+    const handleLogout = async () => {
+        await logout()
         sessionStorage.removeItem('admin_auth')
         navigate('/admin')
+    }
+
+    // Auth yüklenirken loading göster
+    if (loading) {
+        return (
+            <div className="admin-loading">
+                <div className="admin-loading-spinner"></div>
+                <p>Yükleniyor...</p>
+            </div>
+        )
+    }
+
+    // Kullanıcı yoksa null döndür (useEffect yönlendirecek)
+    if (!user) {
+        return null
     }
 
     const menuItems = [
@@ -44,6 +73,9 @@ export function AdminLayout() {
                 </nav>
 
                 <div className="admin-sidebar-footer">
+                    <div className="admin-user-info">
+                        <span className="admin-user-email">{user.email}</span>
+                    </div>
                     <button onClick={handleLogout} className="admin-nav-item logout">
                         <LogOut size={18} />
                         <span>Çıkış</span>
