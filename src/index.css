@@ -1802,70 +1802,97 @@ body {
   padding: 6px 14px;
 }
 
-/* Case Study */
-.case-study {
+/* Case Study Cards - Project List Style */
+.case-study-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
   margin-bottom: 48px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
 }
 
-.case-section {
-  padding: 28px 32px;
+.case-card {
   background: var(--bg-card);
   border-radius: var(--radius-lg);
+  padding: 28px;
   box-shadow: var(--shadow-card);
-  border-left: 4px solid var(--text-muted);
   transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
 }
 
-.case-section:hover {
-  transform: translateY(-2px);
+.case-card:hover {
+  transform: translateY(-6px);
   box-shadow: var(--shadow-card-hover);
 }
 
-/* Different colors for each section type */
-.case-section:nth-child(1) {
-  border-left-color: #ef4444;
-  /* Red for Problem */
-}
-
-.case-section:nth-child(2) {
-  border-left-color: #22c55e;
-  /* Green for Solution */
-}
-
-.case-section:nth-child(3) {
-  border-left-color: #3b82f6;
-  /* Blue for Results */
-}
-
-.case-section h2 {
-  font-size: 18px;
-  font-weight: 700;
-  color: var(--text-primary);
-  margin-bottom: 14px;
+.case-card-icon {
+  width: 56px;
+  height: 56px;
+  background: var(--bg-main);
+  border-radius: 16px;
   display: flex;
   align-items: center;
-  gap: 8px;
+  justify-content: center;
+  font-size: 28px;
+  margin-bottom: 20px;
 }
 
-.case-section p {
-  font-size: 15px;
+.case-card-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+
+.case-card-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 12px;
+}
+
+.case-card-text {
+  font-size: 14px;
   color: var(--text-secondary);
-  line-height: 1.85;
+  line-height: 1.7;
+  flex: 1;
 }
 
-.results-text {
+.case-card-text.results-text {
   white-space: pre-line;
 }
 
-/* Results list styling */
-.case-section:nth-child(3) p {
-  background: var(--bg-main);
-  padding: 16px 20px;
-  border-radius: 12px;
-  font-size: 14px;
+/* Tablet - 2 columns */
+@media (max-width: 1024px) {
+  .case-study-cards {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+}
+
+/* Mobile - 1 column */
+@media (max-width: 768px) {
+  .case-study-cards {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .case-card {
+    padding: 24px;
+  }
+
+  .case-card-icon {
+    width: 48px;
+    height: 48px;
+    font-size: 24px;
+    margin-bottom: 16px;
+  }
+
+  .case-card-title {
+    font-size: 18px;
+  }
 }
 
 .results-text {

@@ -164,27 +164,33 @@ export function ProjectDetailPage() {
                 </div>
             </motion.header>
 
-            {/* Case Study Content */}
+            {/* Case Study Content - Card Format */}
             <motion.div
-                className="case-study"
+                className="case-study-cards"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.2 }}
             >
-                <section className="case-section">
-                    <h2>{lang === 'tr' ? '🎯 Problem' : '🎯 The Problem'}</h2>
-                    <p>{project.problem[lang]}</p>
-                </section>
+                <div className="case-card">
+                    <div className="case-card-icon">🎯</div>
+                    <span className="case-card-label">{lang === 'tr' ? 'PROBLEM' : 'THE PROBLEM'}</span>
+                    <h3 className="case-card-title">{lang === 'tr' ? 'Problem' : 'Problem'}</h3>
+                    <p className="case-card-text">{project.problem[lang]}</p>
+                </div>
 
-                <section className="case-section">
-                    <h2>{lang === 'tr' ? '💡 Çözüm' : '💡 The Solution'}</h2>
-                    <p>{project.solution[lang]}</p>
-                </section>
+                <div className="case-card">
+                    <div className="case-card-icon">💡</div>
+                    <span className="case-card-label">{lang === 'tr' ? 'ÇÖZÜM' : 'THE SOLUTION'}</span>
+                    <h3 className="case-card-title">{lang === 'tr' ? 'Çözüm' : 'Solution'}</h3>
+                    <p className="case-card-text">{project.solution[lang]}</p>
+                </div>
 
-                <section className="case-section">
-                    <h2>{lang === 'tr' ? '📊 Sonuçlar' : '📊 Results'}</h2>
-                    <p className="results-text">{project.results[lang]}</p>
-                </section>
+                <div className="case-card">
+                    <div className="case-card-icon">📊</div>
+                    <span className="case-card-label">{lang === 'tr' ? 'SONUÇLAR' : 'RESULTS'}</span>
+                    <h3 className="case-card-title">{lang === 'tr' ? 'Sonuçlar' : 'Results'}</h3>
+                    <p className="case-card-text results-text">{project.results[lang]}</p>
+                </div>
             </motion.div>
 
             {/* Navigation */}
