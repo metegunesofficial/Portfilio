@@ -1,48 +1,65 @@
 import { motion } from 'framer-motion'
 
-// MG Logo SVG Component - Clean minimal version
+// MG Logo SVG Component - Creative Arrow Design
 function MGLogoSVG() {
     return (
         <svg
             xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 120 120"
+            viewBox="0 0 100 100"
             fill="none"
-            width="48"
-            height="48"
+            width="56"
+            height="56"
         >
-            {/* Main M Letter */}
+            {/* Gradient definitions */}
+            <defs>
+                <linearGradient id="mgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#1a1a1a" />
+                    <stop offset="100%" stopColor="#3b82f6" />
+                </linearGradient>
+                <linearGradient id="blueGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#3b82f6" />
+                    <stop offset="100%" stopColor="#60a5fa" />
+                </linearGradient>
+            </defs>
+
+            {/* M Letter - Left side with arrow pointing up-right */}
             <path
-                d="M20 95 L20 35 L38 60 L56 35 L56 95"
-                stroke="#1a1a1a"
-                strokeWidth="8"
+                d="M15 80 L15 30 L30 50 L45 20 L45 80"
+                stroke="url(#mgGradient)"
+                strokeWidth="7"
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 fill="none"
             />
 
-            {/* G Letter integrated with M */}
+            {/* G Letter - Integrated curve with arrow */}
             <path
-                d="M60 50 C60 32, 85 28, 98 40 M98 50 L98 75 C98 92, 70 95, 58 80 M98 70 L80 70"
-                stroke="#1a1a1a"
-                strokeWidth="8"
+                d="M50 35 C65 15, 90 25, 85 50 L85 65 C85 80, 60 85, 50 70"
+                stroke="url(#blueGradient)"
+                strokeWidth="7"
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 fill="none"
             />
 
-            {/* Tech Circuit Nodes - Blue Accents */}
-            <circle cx="20" cy="95" r="5" fill="#3b82f6" />
-            <circle cx="56" cy="95" r="5" fill="#3b82f6" />
-            <circle cx="38" cy="60" r="4" fill="#3b82f6" />
-            <circle cx="98" cy="70" r="4" fill="#3b82f6" />
+            {/* G inner line */}
+            <path
+                d="M85 55 L65 55"
+                stroke="url(#blueGradient)"
+                strokeWidth="7"
+                strokeLinecap="round"
+                fill="none"
+            />
 
-            {/* Connection Lines */}
-            <line x1="20" y1="55" x2="30" y2="45" stroke="#3b82f6" strokeWidth="2" />
-            <line x1="56" y1="55" x2="65" y2="48" stroke="#3b82f6" strokeWidth="2" />
-
-            {/* Small Accent Dots */}
-            <circle cx="30" cy="45" r="3" fill="#3b82f6" />
-            <circle cx="65" cy="48" r="3" fill="#3b82f6" />
+            {/* Arrow tip on M */}
+            <path
+                d="M40 25 L45 20 L50 28"
+                stroke="#3b82f6"
+                strokeWidth="4"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                fill="none"
+            />
         </svg>
     )
 }
@@ -52,7 +69,7 @@ export function Logo() {
         <motion.a
             href="/"
             className="sidebar-logo-custom"
-            whileHover={{ scale: 1.05 }}
+            whileHover={{ scale: 1.08 }}
             whileTap={{ scale: 0.95 }}
             style={{
                 textDecoration: 'none',
