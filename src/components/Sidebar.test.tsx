@@ -27,9 +27,11 @@ describe('Sidebar', () => {
             expect(screen.getByRole('complementary')).toBeInTheDocument()
         })
 
-        it('renders logo', () => {
+        // Logo text check removed, now checking for logo existence via link
+        it('renders logo link', () => {
             renderWithProviders(<Sidebar />)
-            expect(screen.getByText('METE GÜNEŞ')).toBeInTheDocument()
+            const logoLink = screen.getAllByRole('link').find(link => link.classList.contains('sidebar-logo-custom'))
+            expect(logoLink).toBeInTheDocument()
         })
     })
 

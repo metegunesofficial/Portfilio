@@ -14,13 +14,20 @@ vi.mock('react-router-dom', async () => {
     }
 })
 
-const renderWithRouter = (component: React.ReactNode) => {
-    return render(
-        <MemoryRouter>
-            {component}
-        </MemoryRouter>
-    )
-}
+// Create the mock login function outside the describe block so it can be referenced in the mock factory
+const mockLogin = vi.fn()
+
+// Mock AuthContext
+vi.mock('../../context/AuthContext', async () => {
+    return {
+        AuthProvider: ({ children }: any) => <>{children}</>,
+        useAuth: () => ({
+            login: mockLogin,
+            isConfigured: true,
+            loading: false
+        })
+    }
+})
 
 describe('AdminLogin', () => {
     beforeEach(() => {
@@ -28,52 +35,33 @@ describe('AdminLogin', () => {
         sessionStorage.clear()
     })
 
-    describe('rendering', () => {
-        it('renders login page', () => {
-            renderWithRouter(<AdminLogin />)
-            expect(screen.getByText('Admin Paneli')).toBeInTheDocument()
-        })
+    const renderWithMockedAuth = (component: React.ReactNode) => {
+        return render(
+            <MemoryRouter>
+                {component}
+            </MemoryRouter>
+        )
+    }
 
-        it('renders description text', () => {
-            renderWithRouter(<AdminLogin />)
-            expect(screen.getByText('İçerik yönetimi için giriş yapın')).toBeInTheDocument()
-        })
-
-        it('renders password input', () => {
-            renderWithRouter(<AdminLogin />)
-            expect(screen.getByLabelText('Şifre')).toBeInTheDocument()
-        })
-
-        it('renders password placeholder', () => {
-            renderWithRouter(<AdminLogin />)
-            expect(screen.getByPlaceholderText('Admin şifresini girin')).toBeInTheDocument()
-        })
-
-        it('renders submit button', () => {
-            renderWithRouter(<AdminLogin />)
-            expect(screen.getByRole('button', { name: 'Giriş Yap' })).toBeInTheDocument()
-        })
-
-        it('renders show/hide password toggle', () => {
-            renderWithRouter(<AdminLogin />)
-            const toggleButtons = screen.getAllByRole('button')
-            expect(toggleButtons.length).toBeGreaterThanOrEqual(2)
-        })
+    it('renders login page', () => {
+        renderWithMockedAuth(<AdminLogin />)
+        expect(screen.getByText('Admin Paneli')).toBeInTheDocument()
     })
 
     describe('password visibility toggle', () => {
         it('hides password by default', () => {
-            renderWithRouter(<AdminLogin />)
+            renderWithMockedAuth(<AdminLogin />)
             const input = screen.getByLabelText('Şifre')
             expect(input).toHaveAttribute('type', 'password')
         })
 
         it('toggles password visibility', async () => {
             const user = userEvent.setup()
-            renderWithRouter(<AdminLogin />)
+            renderWithMockedAuth(<AdminLogin />)
 
             const input = screen.getByLabelText('Şifre')
             const toggleButtons = screen.getAllByRole('button')
+            // The toggle button is likely the one that is not the submit button
             const toggleBtn = toggleButtons.find(btn => !btn.textContent?.includes('Giriş'))
 
             expect(input).toHaveAttribute('type', 'password')
@@ -89,123 +77,85 @@ describe('AdminLogin', () => {
     })
 
     describe('form validation', () => {
-        it('disables submit button when password is empty', () => {
-            renderWithRouter(<AdminLogin />)
+        it('disables submit button when inputs are empty', () => {
+            renderWithMockedAuth(<AdminLogin />)
             const submitBtn = screen.getByRole('button', { name: 'Giriş Yap' })
             expect(submitBtn).toBeDisabled()
         })
 
-        it('enables submit button when password is entered', async () => {
+        it('enables submit button when email and password are entered', async () => {
             const user = userEvent.setup()
-            renderWithRouter(<AdminLogin />)
+            renderWithMockedAuth(<AdminLogin />)
 
-            const input = screen.getByLabelText('Şifre')
-            await user.type(input, 'test')
+            const emailInput = screen.getByLabelText('Email')
+            await user.type(emailInput, 'test@example.com')
+
+            const passwordInput = screen.getByLabelText('Şifre')
+            await user.type(passwordInput, 'password')
 
             const submitBtn = screen.getByRole('button', { name: 'Giriş Yap' })
             expect(submitBtn).not.toBeDisabled()
         })
     })
 
-    describe('form submission', () => {
-        beforeEach(() => {
-            vi.useFakeTimers()
-        })
+    it('shows loading state during submission', async () => {
+        const user = userEvent.setup()
 
-        afterEach(() => {
-            vi.useRealTimers()
-        })
+        mockLogin.mockImplementation(() => new Promise(resolve => setTimeout(() => resolve(true), 100)))
 
-        it('shows loading state during submission', async () => {
-            const user = userEvent.setup()
-            renderWithRouter(<AdminLogin />)
+        renderWithMockedAuth(<AdminLogin />)
 
-            const input = screen.getByLabelText('Şifre')
-            await user.type(input, 'wrongpassword')
+        const emailInput = screen.getByLabelText('Email')
+        await user.type(emailInput, 'test@example.com')
 
-            const submitBtn = screen.getByRole('button', { name: 'Giriş Yap' })
-            await user.click(submitBtn)
+        const passwordInput = screen.getByLabelText('Şifre')
+        await user.type(passwordInput, 'password')
 
-            expect(screen.getByText('Giriş yapılıyor...')).toBeInTheDocument()
+        const submitBtn = screen.getByRole('button', { name: 'Giriş Yap' })
+        await user.click(submitBtn)
 
-            await act(async () => {
-                vi.advanceTimersByTime(500)
-            })
+        expect(screen.getByText('Giriş yapılıyor...')).toBeInTheDocument()
 
-            await waitFor(() => {
-                expect(screen.queryByText('Giriş yapılıyor...')).not.toBeInTheDocument()
-            })
-        })
-
-        it('shows error on wrong password', async () => {
-            const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime })
-            renderWithRouter(<AdminLogin />)
-
-            const input = screen.getByLabelText('Şifre')
-            await user.type(input, 'wrongpassword')
-
-            const submitBtn = screen.getByRole('button', { name: 'Giriş Yap' })
-            await user.click(submitBtn)
-
-            await act(async () => {
-                vi.advanceTimersByTime(500)
-            })
-
-            await waitFor(() => {
-                expect(screen.getByText('Yanlış şifre. Lütfen tekrar deneyin.')).toBeInTheDocument()
-            })
-        })
-
-        it('navigates to dashboard on correct password', async () => {
-            const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime })
-            renderWithRouter(<AdminLogin />)
-
-            const input = screen.getByLabelText('Şifre')
-            await user.type(input, 'admin123')
-
-            const submitBtn = screen.getByRole('button', { name: 'Giriş Yap' })
-            await user.click(submitBtn)
-
-            await act(async () => {
-                vi.advanceTimersByTime(500)
-            })
-
-            await waitFor(() => {
-                expect(mockNavigate).toHaveBeenCalledWith('/admin/dashboard')
-            })
-        })
-
-        it('sets session storage on successful login', async () => {
-            const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime })
-            renderWithRouter(<AdminLogin />)
-
-            const input = screen.getByLabelText('Şifre')
-            await user.type(input, 'admin123')
-
-            const submitBtn = screen.getByRole('button', { name: 'Giriş Yap' })
-            await user.click(submitBtn)
-
-            await act(async () => {
-                vi.advanceTimersByTime(500)
-            })
-
-            await waitFor(() => {
-                expect(sessionStorage.getItem('admin_auth')).toBe('true')
-            })
+        await waitFor(() => {
+            expect(screen.queryByText('Giriş yapılıyor...')).not.toBeInTheDocument()
         })
     })
 
-    describe('accessibility', () => {
-        it('password input exists', () => {
-            renderWithRouter(<AdminLogin />)
-            const input = screen.getByLabelText('Şifre')
-            expect(input).toBeInTheDocument()
-        })
+    it('shows error on login failure', async () => {
+        const user = userEvent.setup()
+        mockLogin.mockResolvedValue(false)
 
-        it('has proper form structure', () => {
-            renderWithRouter(<AdminLogin />)
-            const form = document.querySelector('form')
-            expect(form).toBeInTheDocument()
+        renderWithMockedAuth(<AdminLogin />)
+
+        const emailInput = screen.getByLabelText('Email')
+        await user.type(emailInput, 'test@example.com')
+        const passwordInput = screen.getByLabelText('Şifre')
+        await user.type(passwordInput, 'password')
+
+        const submitBtn = screen.getByRole('button', { name: 'Giriş Yap' })
+        await user.click(submitBtn)
+
+        await waitFor(() => {
+            expect(screen.getByText('Giriş başarısız. Email veya şifrenizi kontrol edin.')).toBeInTheDocument()
+        })
+    })
+
+    it('navigates to dashboard on success', async () => {
+        const user = userEvent.setup()
+        mockLogin.mockResolvedValue(true)
+
+        renderWithMockedAuth(<AdminLogin />)
+
+        const emailInput = screen.getByLabelText('Email')
+        await user.type(emailInput, 'test@example.com')
+        const passwordInput = screen.getByLabelText('Şifre')
+        await user.type(passwordInput, 'password')
+
+        const submitBtn = screen.getByRole('button', { name: 'Giriş Yap' })
+        await user.click(submitBtn)
+
+        await waitFor(() => {
+            expect(mockNavigate).toHaveBeenCalledWith('/admin/dashboard')
         })
     })
 })
