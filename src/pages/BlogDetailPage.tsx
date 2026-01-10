@@ -2,6 +2,7 @@ import { useParams, Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { ArrowLeft, Calendar, Clock, Share2, ChevronLeft, ChevronRight } from 'lucide-react'
 import { useLang } from '../context/LangContext'
+import { sanitizeHtml } from '../lib/sanitize'
 
 interface BlogPost {
     id: string
@@ -312,7 +313,7 @@ export function BlogDetailPage() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.2 }}
-                dangerouslySetInnerHTML={{ __html: formatMarkdown(post.content[lang]) }}
+                dangerouslySetInnerHTML={{ __html: sanitizeHtml(formatMarkdown(post.content[lang])) }}
             />
 
             {/* Navigation */}
