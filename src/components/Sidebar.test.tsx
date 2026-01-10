@@ -29,7 +29,8 @@ describe('Sidebar', () => {
 
         it('renders logo', () => {
             renderWithProviders(<Sidebar />)
-            expect(screen.getByText('METE GÜNEŞ')).toBeInTheDocument()
+            const logoLink = screen.getByLabelText('Home - Mete Güneş')
+            expect(logoLink).toHaveClass('sidebar-logo-custom')
         })
     })
 
