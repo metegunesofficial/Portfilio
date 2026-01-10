@@ -1805,27 +1805,67 @@ body {
 /* Case Study */
 .case-study {
   margin-bottom: 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
 .case-section {
-  margin-bottom: 36px;
-  padding: 32px;
+  padding: 28px 32px;
   background: var(--bg-card);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-card);
+  border-left: 4px solid var(--text-muted);
+  transition: all 0.3s ease;
+}
+
+.case-section:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-card-hover);
+}
+
+/* Different colors for each section type */
+.case-section:nth-child(1) {
+  border-left-color: #ef4444;
+  /* Red for Problem */
+}
+
+.case-section:nth-child(2) {
+  border-left-color: #22c55e;
+  /* Green for Solution */
+}
+
+.case-section:nth-child(3) {
+  border-left-color: #3b82f6;
+  /* Blue for Results */
 }
 
 .case-section h2 {
-  font-size: 20px;
-  font-weight: 600;
+  font-size: 18px;
+  font-weight: 700;
   color: var(--text-primary);
-  margin-bottom: 16px;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .case-section p {
-  font-size: 16px;
+  font-size: 15px;
   color: var(--text-secondary);
-  line-height: 1.8;
+  line-height: 1.85;
+}
+
+.results-text {
+  white-space: pre-line;
+}
+
+/* Results list styling */
+.case-section:nth-child(3) p {
+  background: var(--bg-main);
+  padding: 16px 20px;
+  border-radius: 12px;
+  font-size: 14px;
 }
 
 .results-text {
