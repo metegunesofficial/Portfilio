@@ -27,9 +27,9 @@ describe('Sidebar', () => {
             expect(screen.getByRole('complementary')).toBeInTheDocument()
         })
 
-        it('renders logo', () => {
+        it('renders logo with accessible label', () => {
             renderWithProviders(<Sidebar />)
-            expect(screen.getByText('METE GÜNEŞ')).toBeInTheDocument()
+            expect(screen.getByLabelText('Mete Güneş Home')).toBeInTheDocument()
         })
     })
 
@@ -96,13 +96,13 @@ describe('Sidebar', () => {
     describe('language switcher', () => {
         it('renders Turkish flag button', () => {
             renderWithProviders(<Sidebar />)
-            const trButton = screen.getByTitle('Türkçe')
+            const trButton = screen.getByLabelText('Türkçe')
             expect(trButton).toBeInTheDocument()
         })
 
         it('renders English flag button', () => {
             renderWithProviders(<Sidebar />)
-            const enButton = screen.getByTitle('English')
+            const enButton = screen.getByLabelText('English')
             expect(enButton).toBeInTheDocument()
         })
 
@@ -110,7 +110,7 @@ describe('Sidebar', () => {
             const user = userEvent.setup()
             renderWithProviders(<Sidebar />)
 
-            const trButton = screen.getByTitle('Türkçe')
+            const trButton = screen.getByLabelText('Türkçe')
             await user.click(trButton)
 
             // Check that Turkish translations appear
@@ -121,7 +121,7 @@ describe('Sidebar', () => {
             const user = userEvent.setup()
             renderWithProviders(<Sidebar />)
 
-            const enButton = screen.getByTitle('English')
+            const enButton = screen.getByLabelText('English')
             await user.click(enButton)
 
             // Check that English translations appear
@@ -130,7 +130,7 @@ describe('Sidebar', () => {
 
         it('highlights active language button', () => {
             renderWithProviders(<Sidebar />)
-            const enButton = screen.getByTitle('English')
+            const enButton = screen.getByLabelText('English')
             expect(enButton).toHaveClass('active')
         })
     })
@@ -138,49 +138,49 @@ describe('Sidebar', () => {
     describe('social links', () => {
         it('renders LinkedIn link', () => {
             renderWithProviders(<Sidebar />)
-            const linkedinLink = screen.getByTitle('LinkedIn')
+            const linkedinLink = screen.getByLabelText('LinkedIn')
             expect(linkedinLink).toBeInTheDocument()
             expect(linkedinLink).toHaveAttribute('href', 'https://linkedin.com/in/metegunes')
         })
 
         it('renders GitHub link', () => {
             renderWithProviders(<Sidebar />)
-            const githubLink = screen.getByTitle('GitHub')
+            const githubLink = screen.getByLabelText('GitHub')
             expect(githubLink).toBeInTheDocument()
             expect(githubLink).toHaveAttribute('href', 'https://github.com/metegunes')
         })
 
         it('renders Twitter link', () => {
             renderWithProviders(<Sidebar />)
-            const twitterLink = screen.getByTitle('Twitter')
+            const twitterLink = screen.getByLabelText('Twitter')
             expect(twitterLink).toBeInTheDocument()
             expect(twitterLink).toHaveAttribute('href', 'https://twitter.com/metegunes')
         })
 
         it('renders Instagram link', () => {
             renderWithProviders(<Sidebar />)
-            const instagramLink = screen.getByTitle('Instagram')
+            const instagramLink = screen.getByLabelText('Instagram')
             expect(instagramLink).toBeInTheDocument()
             expect(instagramLink).toHaveAttribute('href', 'https://instagram.com/metegunes')
         })
 
         it('renders TikTok link', () => {
             renderWithProviders(<Sidebar />)
-            const tiktokLink = screen.getByTitle('TikTok')
+            const tiktokLink = screen.getByLabelText('TikTok')
             expect(tiktokLink).toBeInTheDocument()
             expect(tiktokLink).toHaveAttribute('href', 'https://tiktok.com/@metegunes')
         })
 
         it('renders Email link', () => {
             renderWithProviders(<Sidebar />)
-            const emailLink = screen.getByTitle('Email')
+            const emailLink = screen.getByLabelText('Email')
             expect(emailLink).toBeInTheDocument()
             expect(emailLink).toHaveAttribute('href', 'mailto:contact@metegunes.dev')
         })
 
         it('opens social links in new tab', () => {
             renderWithProviders(<Sidebar />)
-            const linkedinLink = screen.getByTitle('LinkedIn')
+            const linkedinLink = screen.getByLabelText('LinkedIn')
             expect(linkedinLink).toHaveAttribute('target', '_blank')
             expect(linkedinLink).toHaveAttribute('rel', 'noopener noreferrer')
         })
@@ -192,18 +192,18 @@ describe('Sidebar', () => {
             expect(screen.getByRole('navigation')).toBeInTheDocument()
         })
 
-        it('language buttons have proper titles', () => {
+        it('language buttons have proper labels', () => {
             renderWithProviders(<Sidebar />)
-            expect(screen.getByTitle('Türkçe')).toBeInTheDocument()
-            expect(screen.getByTitle('English')).toBeInTheDocument()
+            expect(screen.getByLabelText('Türkçe')).toBeInTheDocument()
+            expect(screen.getByLabelText('English')).toBeInTheDocument()
         })
 
-        it('social links have proper titles', () => {
+        it('social links have proper labels', () => {
             renderWithProviders(<Sidebar />)
-            expect(screen.getByTitle('LinkedIn')).toBeInTheDocument()
-            expect(screen.getByTitle('GitHub')).toBeInTheDocument()
-            expect(screen.getByTitle('Twitter')).toBeInTheDocument()
-            expect(screen.getByTitle('Email')).toBeInTheDocument()
+            expect(screen.getByLabelText('LinkedIn')).toBeInTheDocument()
+            expect(screen.getByLabelText('GitHub')).toBeInTheDocument()
+            expect(screen.getByLabelText('Twitter')).toBeInTheDocument()
+            expect(screen.getByLabelText('Email')).toBeInTheDocument()
         })
     })
 })
