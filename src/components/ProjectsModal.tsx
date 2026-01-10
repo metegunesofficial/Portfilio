@@ -266,24 +266,34 @@ export function ProjectsModal({ isOpen, onClose }: ProjectsModalProps) {
                                             ))}
                                         </div>
 
-                                        {selectedProject.problem && (
-                                            <div className="modal-detail-section">
-                                                <h4>🎯 {lang === 'tr' ? 'Problem' : 'The Problem'}</h4>
-                                                <p>{selectedProject.problem[lang]}</p>
-                                            </div>
-                                        )}
+                                        {(selectedProject.problem || selectedProject.solution || selectedProject.results) && (
+                                            <div className="modal-detail-cards">
+                                                {selectedProject.problem && (
+                                                    <div className="modal-case-card">
+                                                        <div className="modal-case-icon">🎯</div>
+                                                        <span className="modal-case-label">{lang === 'tr' ? 'PROBLEM' : 'THE PROBLEM'}</span>
+                                                        <h4>{lang === 'tr' ? 'Problem' : 'Problem'}</h4>
+                                                        <p>{selectedProject.problem[lang]}</p>
+                                                    </div>
+                                                )}
 
-                                        {selectedProject.solution && (
-                                            <div className="modal-detail-section">
-                                                <h4>💡 {lang === 'tr' ? 'Çözüm' : 'The Solution'}</h4>
-                                                <p>{selectedProject.solution[lang]}</p>
-                                            </div>
-                                        )}
+                                                {selectedProject.solution && (
+                                                    <div className="modal-case-card">
+                                                        <div className="modal-case-icon">💡</div>
+                                                        <span className="modal-case-label">{lang === 'tr' ? 'ÇÖZÜM' : 'THE SOLUTION'}</span>
+                                                        <h4>{lang === 'tr' ? 'Çözüm' : 'Solution'}</h4>
+                                                        <p>{selectedProject.solution[lang]}</p>
+                                                    </div>
+                                                )}
 
-                                        {selectedProject.results && (
-                                            <div className="modal-detail-section">
-                                                <h4>📊 {lang === 'tr' ? 'Sonuçlar' : 'Results'}</h4>
-                                                <p className="results-text">{selectedProject.results[lang]}</p>
+                                                {selectedProject.results && (
+                                                    <div className="modal-case-card">
+                                                        <div className="modal-case-icon">📊</div>
+                                                        <span className="modal-case-label">{lang === 'tr' ? 'SONUÇLAR' : 'RESULTS'}</span>
+                                                        <h4>{lang === 'tr' ? 'Sonuçlar' : 'Results'}</h4>
+                                                        <p className="results-text">{selectedProject.results[lang]}</p>
+                                                    </div>
+                                                )}
                                             </div>
                                         )}
                                     </motion.div>
